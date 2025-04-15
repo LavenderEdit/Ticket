@@ -21,31 +21,33 @@ class Usuario extends BaseModel
     }
 
     // Procedimientos almacenados
-    public function autenticarUsuario(string $correo, string $password)
+    public function getUsuarioByCorreo(string $correo)
     {
         $result = $this->callProcedure('autenticar', [$correo]);
+        return ($result && isset($result[0])) ? $result[0] : false;
+    }
 
-        if ($result && isset($result[0])) {
-            $usuario = $result[0];
-
-            if ($password === $usuario['contrasenia']) {
-                unset($usuario['contrasenia']);
-                return $usuario;
-            }
+    public function autenticarUsuario(string $correo, string $password)
+    {
+        $usuario = $this->getUsuarioByCorreo($correo);
+        if ($usuario && password_verify($password, $usuario['contrasena'])) {
+            unset($usuario['contrasena']);
+            return $usuario;
         }
-
         return false;
     }
 
     // Crud Básico
     public function insertarUsuario(string $nombre, ?string $telefono, string $email, ?string $fechaLogeo, string $contrasena, ?int $rol_id)
     {
-        return $this->callProcedure('crear', [$nombre, $telefono, $email, $fechaLogeo, $contrasena, $rol_id]);
+        $hash = password_hash($contrasena, PASSWORD_DEFAULT);
+        return $this->callProcedure('crear', [$nombre, $telefono, $email, $fechaLogeo, $hash, $rol_id]);
     }
 
     public function editarUsuario(int $id, string $nombre, ?string $telefono, string $email, ?string $fechaLogeo, string $contrasena, ?int $rol_id, bool $activo)
     {
-        return $this->callProcedure('editar', [$id, $nombre, $telefono, $email, $fechaLogeo, $contrasena, $rol_id, $activo]);
+        $hash = password_hash($contrasena, PASSWORD_DEFAULT);
+        return $this->callProcedure('editar', [$id, $nombre, $telefono, $email, $fechaLogeo, $hash, $rol_id, $activo]);
     }
 
     public function visualizarUsuarios()
