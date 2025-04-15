@@ -1,13 +1,15 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../models/Ticket.php';
 
 use Database\Database;
 use Models\Ticket;
+use Controllers\Controller;
 
-class TicketController
+class TicketController extends Controller
 {
     private Ticket $ticketModel;
 
@@ -17,37 +19,98 @@ class TicketController
         $this->ticketModel = new Ticket($pdo);
     }
 
-    public function guardarTicket(): void
+    protected function getAll(): void
     {
-        $titulo = trim($_POST['titulo'] ?? '');
-        $descripcion = trim($_POST['descripcion'] ?? '');
-        $estado = trim($_POST['estado'] ?? 'Pendiente');
-        $prioridad = trim($_POST['prioridad'] ?? 'Media');
-        $creadorId = intval($_POST['creador_id'] ?? 0);
-        $asignadoId = $_POST['asignado_id'] !== '' ? intval($_POST['asignado_id']) : null;
-        $compraId = $_POST['compra_id'] !== '' ? intval($_POST['compra_id']) : null;
+        $tickets = $this->ticketModel->visualizarTickets();
+        $this->sendResponse(200, $tickets);
+    }
 
-        $resultado = $this->ticketModel->insertarTicket($titulo, $descripcion, $estado, $prioridad, $creadorId, $asignadoId, $compraId);
+    protected function get(int $id): void
+    {
+        $ticket = $this->ticketModel->visualizarTicketsporId($id);
+        if ($ticket) {
+            $this->sendResponse(200, $ticket);
+        } else {
+            $this->sendResponse(404, ['message' => 'Ticket no encontrado.']);
+        }
+    }
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => (bool)$resultado,
-            'message' => $resultado ? 'Ticket registrado correctamente.' : 'Error al registrar el ticket.'
+    protected function post(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos']);
+            return;
+        }
+
+        $titulo = $data['titulo'] ?? '';
+        $descripcion = $data['descripcion'] ?? null;
+        $estado = $data['estado'] ?? '';
+        $prioridad = $data['prioridad'] ?? '';
+        $creador_id = isset($data['creador_id']) ? intval($data['creador_id']) : 0;
+        $compra_id = isset($data['compra_id']) ? intval($data['compra_id']) : null;
+        $foto_ticket = $data['foto_ticket'] ?? null;
+        $pdf_ticket = $data['pdf_ticket'] ?? null;
+        $activo = isset($data['activo']) ? (bool) $data['activo'] : true;
+
+        $resultado = $this->ticketModel->insertarTicket(
+            $titulo,
+            $descripcion,
+            $estado,
+            $prioridad,
+            $creador_id,
+            $compra_id,
+            $foto_ticket,
+            $pdf_ticket,
+            $activo
+        );
+
+        $this->sendResponse($resultado ? 201 : 500, [
+            'message' => $resultado ? 'Ticket creado correctamente.' : 'Error al crear el ticket.'
         ]);
     }
 
-    public function obtenerTickets(): void
+    protected function put(int $id): void
     {
-        $tickets = $this->ticketModel->obtenerTickets();
-        header('Content-Type: application/json');
-        echo json_encode($tickets);
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos']);
+            return;
+        }
+
+        $titulo = $data['titulo'] ?? '';
+        $descripcion = $data['descripcion'] ?? null;
+        $estado = $data['estado'] ?? '';
+        $prioridad = $data['prioridad'] ?? '';
+        $creador_id = isset($data['creador_id']) ? intval($data['creador_id']) : null;
+        $compra_id = isset($data['compra_id']) ? intval($data['compra_id']) : null;
+        $foto_ticket = $data['foto_ticket'] ?? null;
+        $pdf_ticket = $data['pdf_ticket'] ?? null;
+        $activo = isset($data['activo']) ? (bool) $data['activo'] : true;
+
+        $resultado = $this->ticketModel->editarTicket(
+            $id,
+            $titulo,
+            $descripcion,
+            $estado,
+            $prioridad,
+            $creador_id,
+            $compra_id,
+            $foto_ticket,
+            $pdf_ticket,
+            $activo
+        );
+
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Ticket actualizado correctamente.' : 'Error al actualizar el ticket.'
+        ]);
     }
 
-    public function obtenerTicketPorId(): void
+    protected function delete(int $id): void
     {
-        $id = $_GET['id'] ?? '';
-        $ticket = $this->ticketModel->obtenerTicketPorId($id);
-        header('Content-Type: application/json');
-        echo json_encode($ticket);
+        $resultado = $this->ticketModel->eliminarTicket($id);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Ticket eliminado correctamente.' : 'Error al eliminar el ticket.'
+        ]);
     }
 }
