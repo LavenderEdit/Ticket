@@ -1,13 +1,15 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../models/Compra.php';
 
 use Database\Database;
 use Models\Compra;
+use Controllers\Controller;
 
-class CompraController
+class CompraController extends Controller
 {
     private Compra $compraModel;
 
@@ -17,33 +19,63 @@ class CompraController
         $this->compraModel = new Compra($pdo);
     }
 
-    public function guardarCompra(): void
+    protected function getAll(): void
     {
-        $usuarioId = intval($_POST['usuario_id'] ?? 0);
-        $descripcion = trim($_POST['descripcion'] ?? '');
-        $total = floatval($_POST['total'] ?? 0);
+        $compras = $this->compraModel->visualizarCompras();
+        $this->sendResponse(200, $compras);
+    }
 
-        $resultado = $this->compraModel->insertarCompra($usuarioId, $descripcion, $total);
+    protected function get(int $id): void
+    {
+        $compra = $this->compraModel->visualizarCompraPorId($id);
+        if ($compra) {
+            $this->sendResponse(200, $compra);
+        } else {
+            $this->sendResponse(404, ['message' => 'Compra no encontrada.']);
+        }
+    }
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => (bool)$resultado,
-            'message' => $resultado ? 'Compra registrada correctamente.' : 'Error al registrar la compra.'
+    protected function post(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos.']);
+            return;
+        }
+
+        $tecnico_id = isset($data['tecnico_id']) ? intval($data['tecnico_id']) : 0;
+        $total = isset($data['total']) ? floatval($data['total']) : 0.0;
+
+        $resultado = $this->compraModel->insertarCompra($tecnico_id, $total);
+
+        $this->sendResponse($resultado ? 201 : 500, [
+            'message' => $resultado ? 'Compra creada correctamente.' : 'Error al crear Compra.'
         ]);
     }
 
-    public function obtenerCompras(): void
+    protected function put(int $id): void
     {
-        $compras = $this->compraModel->obtenerCompras();
-        header('Content-Type: application/json');
-        echo json_encode($compras);
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos.']);
+            return;
+        }
+
+        $tecnico_id = isset($data['tecnico_id']) ? intval($data['tecnico_id']) : 0;
+        $total = isset($data['total']) ? floatval($data['total']) : 0.0;
+        $activo = isset($data['activo']) ? (bool) $data['activo'] : true;
+
+        $resultado = $this->compraModel->editarCompra($id, $tecnico_id, $total, $activo);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Compra actualizada correctamente.' : 'Error al actualizar Compra.'
+        ]);
     }
 
-    public function obtenerCompraPorId(): void
+    protected function delete(int $id): void
     {
-        $id = $_GET['id'] ?? '';
-        $compra = $this->compraModel->obtenerCompraPorId($id);
-        header('Content-Type: application/json');
-        echo json_encode($compra);
+        $resultado = $this->compraModel->eliminarCompra($id);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Compra eliminada correctamente.' : 'Error al eliminar Compra.'
+        ]);
     }
 }

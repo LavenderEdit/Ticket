@@ -1,13 +1,15 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../models/CompraDetalle.php';
 
 use Database\Database;
 use Models\CompraDetalle;
+use Controllers\Controller;
 
-class CompraDetalleController
+class CompraDetalleController extends Controller
 {
     private CompraDetalle $compraDetalleModel;
 
@@ -17,27 +19,67 @@ class CompraDetalleController
         $this->compraDetalleModel = new CompraDetalle($pdo);
     }
 
-    public function guardarDetalle(): void
+    protected function getAll(): void
     {
-        $compraId = intval($_POST['compra_id'] ?? 0);
-        $producto = trim($_POST['producto'] ?? '');
-        $cantidad = intval($_POST['cantidad'] ?? 0);
-        $precioUnitario = floatval($_POST['precio_unitario'] ?? 0);
+        $compraDetalles = $this->compraDetalleModel->visualizarCompraDetalles();
+        $this->sendResponse(200, $compraDetalles);
+    }
 
-        $resultado = $this->compraDetalleModel->insertarDetalle($compraId, $producto, $cantidad, $precioUnitario);
+    protected function get(int $id): void
+    {
+        $compraDetalle = $this->compraDetalleModel->visualizarCompraDetallePorId($id);
+        if ($compraDetalle) {
+            $this->sendResponse(200, $compraDetalle);
+        } else {
+            $this->sendResponse(404, ['message' => 'CompraDetalle no encontrado.']);
+        }
+    }
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => (bool)$resultado,
-            'message' => $resultado ? 'Detalle de compra guardado correctamente.' : 'Error al guardar el detalle.'
+    protected function post(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos.']);
+            return;
+        }
+
+        $compra_id = isset($data['compra_id']) ? intval($data['compra_id']) : 0;
+        $componente = $data['componente'] ?? '';
+        $cantidad = isset($data['cantidad']) ? intval($data['cantidad']) : 0;
+        $precio = isset($data['precio']) ? floatval($data['precio']) : 0.0;
+
+        $resultado = $this->compraDetalleModel->insertarCompraDetalle($compra_id, $componente, $cantidad, $precio);
+
+        $this->sendResponse($resultado ? 201 : 500, [
+            'message' => $resultado ? 'CompraDetalle creado correctamente.' : 'Error al crear CompraDetalle.'
         ]);
     }
 
-    public function obtenerDetallesPorCompra(): void
+    protected function put(int $id): void
     {
-        $id = $_GET['compra_id'] ?? '';
-        $detalles = $this->compraDetalleModel->obtenerDetallesPorCompra($id);
-        header('Content-Type: application/json');
-        echo json_encode($detalles);
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos.']);
+            return;
+        }
+
+        $compra_id = isset($data['compra_id']) ? intval($data['compra_id']) : 0;
+        $componente = $data['componente'] ?? '';
+        $cantidad = isset($data['cantidad']) ? intval($data['cantidad']) : 0;
+        $precio = isset($data['precio']) ? floatval($data['precio']) : 0.0;
+        $activo = isset($data['activo']) ? (bool) $data['activo'] : true;
+
+        $resultado = $this->compraDetalleModel->editarCompraDetalle($id, $compra_id, $componente, $cantidad, $precio, $activo);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'CompraDetalle actualizado correctamente.' : 'Error al actualizar CompraDetalle.'
+        ]);
+    }
+
+    protected function delete(int $id): void
+    {
+        $resultado = $this->compraDetalleModel->eliminarCompraDetalle($id);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'CompraDetalle eliminado correctamente.' : 'Error al eliminar CompraDetalle.'
+        ]);
     }
 }

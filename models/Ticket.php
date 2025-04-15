@@ -23,6 +23,7 @@ class Ticket extends BaseModel
     }
 
     // Procedimientos almacenados
+
     public function insertarTicket(string $titulo, ?string $descripcion, string $estado, string $prioridad, int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket)
     {
         return $this->callProcedure('crear', [$titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket]);
@@ -47,8 +48,6 @@ class Ticket extends BaseModel
     {
         return $this->callProcedure('eliminar', [$id]);
     }
-
-
 
     // Getters y setters
     public function getId(): int

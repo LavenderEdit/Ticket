@@ -16,7 +16,7 @@ class Roles extends BaseModel
         parent::__construct($pdo);
     }
 
-    public function insertarRol(string $nombre, ?string $descripcion, bool $activo)
+    public function insertarRol(string $nombre, ?string $descripcion)
     {
         return $this->callProcedure('crear', [$nombre, $descripcion]);
     }
