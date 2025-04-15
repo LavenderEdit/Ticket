@@ -11,13 +11,6 @@ export function runComponentRegistry() {
     case "register.php":
       togglePasswordVisibility();
       break;
-<<<<<<< HEAD
-=======
-    case "index.php":
-      break;
-    case "dashboard.php":
-      break;
->>>>>>> 18698874288037c8c1e51fa6ca22cbcfc3469a66
     default:
       break;
   }
