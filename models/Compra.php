@@ -2,41 +2,87 @@
 namespace Models;
 require_once __DIR__ . '/../models/BaseModel.php';
 
-class RolPermiso extends BaseModel
+class Compra extends BaseModel
 {
-    private int $rol_id;
-    private int $permiso_id;
+    private int $id;
+    private int $tecnico_id;
+    private string $fecha;
+    private float $total;
+    private bool $activo;
+    private string $fecha_creacion;
+    private string $fecha_actualizacion;
 
     public function __construct($pdo)
     {
         parent::__construct($pdo);
     }
 
-    public function asignarPermisoARol(int $rolId, int $permisoId)
+    // Procedimientos de Almacenado
+    public function insertarCompra(int $tecnicoId, float $total, bool $activo)
     {
-        return $this->callProcedure('Asignar_Permiso_A_Rol', [$rolId, $permisoId]);
+        return $this->callProcedure('Insertar_Compra', [$tecnicoId, $total, $activo]);
     }
 
-    public function obtenerPermisosPorRol(int $rolId)
+    public function obtenerCompras()
     {
-        return $this->callProcedure('Obtener_Permisos_Por_Rol', [$rolId]);
+        return $this->callProcedure('Obtener_Compras', []);
     }
 
     // Getters y setters
-    public function getRolId(): int
+    public function getId(): int
     {
-        return $this->rol_id;
+        return $this->id;
     }
-    public function getPermisoId(): int
+    public function getTecnicoId(): int
     {
-        return $this->permiso_id;
+        return $this->tecnico_id;
     }
-    public function setRolId(int $rolId): void
+    public function getFecha(): string
     {
-        $this->rol_id = $rolId;
+        return $this->fecha;
     }
-    public function setPermisoId(int $permisoId): void
+    public function getTotal(): float
     {
-        $this->permiso_id = $permisoId;
+        return $this->total;
+    }
+    public function isActivo(): bool
+    {
+        return $this->activo;
+    }
+    public function getFechaCreacion(): string
+    {
+        return $this->fecha_creacion;
+    }
+    public function getFechaActualizacion(): string
+    {
+        return $this->fecha_actualizacion;
+    }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    public function setTecnicoId(int $tecnicoId): void
+    {
+        $this->tecnico_id = $tecnicoId;
+    }
+    public function setFecha(string $fecha): void
+    {
+        $this->fecha = $fecha;
+    }
+    public function setTotal(float $total): void
+    {
+        $this->total = $total;
+    }
+    public function setActivo(bool $activo): void
+    {
+        $this->activo = $activo;
+    }
+    public function setFechaCreacion(string $fechaCreacion): void
+    {
+        $this->fecha_creacion = $fechaCreacion;
+    }
+    public function setFechaActualizacion(string $fechaActualizacion): void
+    {
+        $this->fecha_actualizacion = $fechaActualizacion;
     }
 }
