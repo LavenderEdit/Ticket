@@ -18,14 +18,30 @@ class CompraDetalle extends BaseModel
         parent::__construct($pdo);
     }
 
-    public function insertarDetalle(int $compraId, string $componente, int $cantidad, float $precio, bool $activo)
+    // Procedimientos de Almacenado
+    public function insertarCompraDetalle(int $compra_id, string $componente , int $cantidad, float $precio)
     {
-        return $this->callProcedure('Insertar_CompraDetalle', [$compraId, $componente, $cantidad, $precio, $activo]);
+        return $this->callProcedure('crear', [$compra_id, $componente, $cantidad, $precio]);
     }
 
-    public function obtenerDetallesPorCompra(int $compraId)
+    public function editarCompraDetalle(int $id, int $compra_id, string $componente, int $cantidad, float $precio, bool $activo)
     {
-        return $this->callProcedure('Obtener_Detalles_Por_Compra', [$compraId]);
+        return $this->callProcedure('editar', [$id, $compra_id, $componente, $cantidad, $precio, $activo]);
+    }
+
+    public function visualizarCompraDetalles()
+    {
+        return $this->callProcedure('visualizar', []);
+    }
+
+    public function visualizarCompraDetallePorId(int $id)
+    {
+        return $this->callProcedure('visualizar_por_id', [$id]);
+    }
+
+    public function eliminarCompraDetalle(int $id)
+    {
+        return $this->callProcedure('eliminar', [$id]);
     }
 
     // Getters y setters
