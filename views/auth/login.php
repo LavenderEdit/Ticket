@@ -25,7 +25,7 @@
                     <div class="input-group">
                         <input type="password" class="form-control" id="contra" name="contra" placeholder="Contraseña"
                             minlength="8" maxlength="16" pattern=".{8,16}" required>
-                        <button type="button" class="btn-outline-secondary btn toggle-password">
+                        <button type="button" class="btn btn-outline-secondary toggle-password">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
