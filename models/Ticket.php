@@ -21,35 +21,35 @@ class Ticket extends BaseModel
     {
         parent::__construct($pdo);
     }
-    
-     // Procedimientos almacenados
-     public function insertarTicket(string $titulo,?string $descripcion, string $estado, string $prioridad,int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket, bool $activo)
-     {
-         return $this->callProcedure('crear', [$titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket,$activo]);
-     }
- 
-     public function editarTicket(int $id, string $titulo, ?string $descripcion, string $estado, string $prioridad, ?int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket, bool $activo)
-     {
-         return $this->callProcedure('editar', [$id, $titulo, $descripcion, $estado, $prioridad,$creador_id,$compra_id,$foto_ticket,$pdf_ticket,$activo]);
-     }
- 
-     public function visualizarTickets()
-     {
-         return $this->callProcedure('visualizar', []);
-     }
- 
-     public function visualizarTicketsporId(int $id)
-     {
-         return $this->callProcedure('visualizar_por_id', [$id]);
-     }
- 
-     public function eliminarTicket(int $id)
-     {
-         return $this->callProcedure('eliminar', [$id]);
-     }
- 
 
-    
+    // Procedimientos almacenados
+    public function insertarTicket(string $titulo, ?string $descripcion, string $estado, string $prioridad, int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket)
+    {
+        return $this->callProcedure('crear', [$titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket]);
+    }
+
+    public function editarTicket(int $id, string $titulo, ?string $descripcion, string $estado, string $prioridad, ?int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket, bool $activo)
+    {
+        return $this->callProcedure('editar', [$id, $titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket, $activo]);
+    }
+
+    public function visualizarTickets()
+    {
+        return $this->callProcedure('visualizar', []);
+    }
+
+    public function visualizarTicketsporId(int $id)
+    {
+        return $this->callProcedure('visualizar_por_id', [$id]);
+    }
+
+    public function eliminarTicket(int $id)
+    {
+        return $this->callProcedure('eliminar', [$id]);
+    }
+
+
+
     // Getters y setters
     public function getId(): int
     {
