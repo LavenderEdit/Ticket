@@ -13,11 +13,8 @@ export function runComponentRegistry() {
       togglePasswordVisibility();
       break;
     case "index.php":
-      setupMainCarousel();
       break;
     case "dashboard.php":
-      initSidebar();
-      initSidebarFeatures();
       break;
     default:
       break;
