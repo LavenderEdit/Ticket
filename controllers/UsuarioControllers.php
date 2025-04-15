@@ -3,11 +3,13 @@ namespace Controllers;
 
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../controllers/Controller.php';
 
 use Database\Database;
 use Models\Usuario;
+use Controllers\Controller;
 
-class UsuarioController
+class UsuarioController extends Controller
 {
     private Usuario $usuarioModel;
 
@@ -17,44 +19,73 @@ class UsuarioController
         $this->usuarioModel = new Usuario($pdo);
     }
 
-    public function guardarUsuario(): void
+    protected function getAll(): void
     {
-        $nombre = trim($_POST['nombre'] ?? '');
-        $telefono = trim($_POST['telefono'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $fechaLogeo = trim($_POST['fecha_logeo'] ?? '');
-        $contrasena = trim($_POST['contrasena'] ?? '');
-        $foto = trim($_POST['foto'] ?? '');
-        $tipoUsuarioId = intval($_POST['tipo_usuario_id'] ?? 0);
+        $usuarios = $this->usuarioModel->visualizarUsuarios();
+        $this->sendResponse(200, $usuarios);
+    }
 
-        $resultado = $this->usuarioModel->insertarUsuario($nombre, $telefono, $email, $fechaLogeo, $contrasena, $foto, $tipoUsuarioId);
+    protected function get(int $id): void
+    {
+        $usuario = $this->usuarioModel->visualizarUsuarioPorId($id);
+        if ($usuario) {
+            $this->sendResponse(200, $usuario);
+        } else {
+            $this->sendResponse(404, ['message' => 'Usuario no encontrado.']);
+        }
+    }
 
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => (bool)$resultado,
-            'message' => $resultado ? 'Usuario creado correctamente.' : 'Error al crear el usuario.'
+    protected function post(): void
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos']);
+            return;
+        }
+
+        $resultado = $this->usuarioModel->insertarUsuario(
+            $data['nombre'] ?? '',
+            $data['telefono'] ?? '',
+            $data['email'] ?? '',
+            $data['fecha_logeo'] ?? '',
+            $data['contrasena'] ?? '',
+            $data['id_rol'] ?? null
+        );
+
+        $this->sendResponse($resultado ? 201 : 500, [
+            'message' => $resultado ? 'Usuario creado' : 'Error al crear'
         ]);
     }
 
-    public function obtenerUsuarios(): void
+    protected function put(int $id): void
     {
-        $usuarios = $this->usuarioModel->obtenerUsuarios();
-        header('Content-Type: application/json');
-        echo json_encode($usuarios);
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos']);
+            return;
+        }
+
+        $resultado = $this->usuarioModel->editarUsuario(
+            $id,
+            $data['nombre'] ?? '',
+            $data['telefono'] ?? '',
+            $data['email'] ?? '',
+            $data['fecha_logeo'] ?? '',
+            $data['contrasena'] ?? '',
+            $data['id_rol'] ?? null,
+            $data['activo'] ?? true
+        );
+
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Usuario actualizado' : 'Error al actualizar'
+        ]);
     }
 
-    public function obtenerUsuarioPorId(): void
+    protected function delete(int $id): void
     {
-        $id = $_GET['id'] ?? '';
-        $usuario = $this->usuarioModel->obtenerUsuarioPorId($id);
-        header('Content-Type: application/json');
-        echo json_encode($usuario);
-    }
-
-    public function obtenerClientesTecnicos(): void
-    {
-        $resultados = $this->usuarioModel->obtenerClientesTecnicos();
-        header('Content-Type: application/json');
-        echo json_encode($resultados);
+        $resultado = $this->usuarioModel->eliminarUsuario($id);
+        $this->sendResponse($resultado ? 200 : 500, [
+            'message' => $resultado ? 'Usuario eliminado' : 'Error al eliminar'
+        ]);
     }
 }
