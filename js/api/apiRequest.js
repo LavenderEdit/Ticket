@@ -1,6 +1,6 @@
 export function apiRequest(controller, action, method = "GET", data = null) {
   return new Promise((resolve, reject) => {
-    let url = `/GestorSimple/router.php?controller=${encodeURIComponent(
+    let url = `/Ticket/router.php?controller=${encodeURIComponent(
       controller
     )}&action=${encodeURIComponent(action)}`;
 
