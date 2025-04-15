@@ -21,6 +21,23 @@ class Usuario extends BaseModel
     }
 
     // Procedimientos almacenados
+    public function autenticarUsuario(string $correo, string $password)
+    {
+        $result = $this->callProcedure('autenticar', [$correo]);
+
+        if ($result && isset($result[0])) {
+            $usuario = $result[0];
+
+            if ($password === $usuario['contrasenia']) {
+                unset($usuario['contrasenia']);
+                return $usuario;
+            }
+        }
+
+        return false;
+    }
+
+    // Crud Básico
     public function insertarUsuario(string $nombre, ?string $telefono, string $email, ?string $fechaLogeo, string $contrasena, ?int $rol_id)
     {
         return $this->callProcedure('crear', [$nombre, $telefono, $email, $fechaLogeo, $contrasena, $rol_id]);

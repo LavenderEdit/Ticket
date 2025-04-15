@@ -1,45 +1,5 @@
-import { initVentas } from "../ventas/initVentas.js";
-import { initProductos } from "../productos/initProductos.js?v=3";
-import { initClientes } from "../clientes/initClientes.js?v=5";
-import { initProveedores } from "../proveedores/initProveedores.js?v=5";
-import { initCategoria } from "../categoria/initCategoria.js";
-import { initTipoCliente } from "../tipocliente/initTipoCliente.js";
-import { initTipoUsuario } from "../tipousuario/initTipoUsuario.js";
-import { initMetodoPago } from "../metodopago/initMetodoPago.js";
-import { initPagos } from "../pagos/initPagos.js";
-import { initUsuario } from "../usuario/initUsuario.js";
-
 const pageCallbacks = {
-  ventas: () => {
-    initVentas();
-  },
-  productos: () => {
-    initProductos();
-  },
-  clientes: () => {
-    initClientes();
-  },
-  proveedores: () => {
-    initProveedores();
-  },
-  categorias: () => {
-    initCategoria();
-  },
-  tipos_usuario: () => {
-    initTipoUsuario();
-  },
-  tipos_cliente: () => {
-    initTipoCliente();
-  },
-  metodos_pago: () => {
-    initMetodoPago();
-  },
-  pagos: () => {
-    initPagos();
-  },
-  usuario: () => {
-    initUsuario();
-  },
+
 };
 
 export function loadPageContent(page) {
