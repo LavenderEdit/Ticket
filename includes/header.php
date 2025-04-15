@@ -7,7 +7,7 @@
     <meta name="description"
         content="Sistema de ticketería innovador para la gestión eficiente de soporte técnico, reclamos y garantías. Automatiza la atención al cliente con tecnología de punta, respaldado por años de experiencia en soluciones TI especializadas.">
     <title> JhardSystex </title>
-    <base href="/">
+    <base href="/Ticket/">
     <link rel="icon" href="images/iconos/icon-robot.webp" type="image/x-icon">
     <link rel="stylesheet" href="css/main-style.css?v=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
