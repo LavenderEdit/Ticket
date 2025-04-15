@@ -18,14 +18,29 @@ class Compra extends BaseModel
     }
 
     // Procedimientos de Almacenado
-    public function insertarCompra(int $tecnicoId, float $total, bool $activo)
+    public function insertarCompra(int $tecnico_id,float $total)
     {
-        return $this->callProcedure('Insertar_Compra', [$tecnicoId, $total, $activo]);
+        return $this->callProcedure('crear', [$tecnico_id, $total]);
     }
 
-    public function obtenerCompras()
+    public function editarCompra(int $id, int $tecnico_id,float $total, bool $activo)
     {
-        return $this->callProcedure('Obtener_Compras', []);
+        return $this->callProcedure('editar', [$id, $tecnico_id, $total, $activo]);
+    }
+
+    public function visualizarCompras()
+    {
+        return $this->callProcedure('visualizar', []);
+    }
+
+    public function visualizarCompraPorId(int $id)
+    {
+        return $this->callProcedure('visualizar_por_id', [$id]);
+    }
+
+    public function eliminarCompra(int $id)
+    {
+        return $this->callProcedure('eliminar', [$id]);
     }
 
     // Getters y setters

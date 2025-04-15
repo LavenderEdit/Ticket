@@ -25,7 +25,7 @@ class Roles extends BaseModel
     {
         return $this->callProcedure('editar', [$id, $nombre, $descripcion, $activo]);
     }
-//te crees habil
+
     public function visualizarRoles()
     {
         return $this->callProcedure('visualizar', []);
