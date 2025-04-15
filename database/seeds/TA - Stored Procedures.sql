@@ -1,6 +1,7 @@
 DELIMITER $$
+-- -----------------------------------
 -- Procedimientos para la tabla Roles
-
+-- -----------------------------------
 -- sp_crear_Roles: Inserta un nuevo registro en Roles
 DROP PROCEDURE IF EXISTS sp_crear_Roles$$
 CREATE PROCEDURE sp_crear_Roles (
@@ -54,9 +55,9 @@ BEGIN
     UPDATE Roles SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla Permisos
------------------------------------------
+-- ---------------------------------------
 
 -- sp_crear_Permisos: Inserta un nuevo registro en Permisos
 DROP PROCEDURE IF EXISTS sp_crear_Permisos$$
@@ -111,9 +112,9 @@ BEGIN
     UPDATE Permisos SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla Rol_Permiso
------------------------------------------
+-- ---------------------------------------
 -- Nota: Para las tablas de relación, se requiere pasar los dos identificadores.
 -- sp_crear_Rol_Permiso: Inserta una relación entre rol y permiso
 DROP PROCEDURE IF EXISTS sp_crear_Rol_Permiso$$
@@ -170,9 +171,9 @@ BEGIN
     WHERE rol_id = p_rol_id AND permiso_id = p_permiso_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla Usuario
------------------------------------------
+-- ---------------------------------------
 
 -- sp_crear_Usuario: Inserta un nuevo registro en Usuario
 DROP PROCEDURE IF EXISTS sp_crear_Usuario$$
@@ -239,9 +240,26 @@ BEGIN
     UPDATE Usuario SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
 END$$
 
------------------------------------------
+-- Buscar a un usuario por correo para autenticarlos
+DROP PROCEDURE IF EXISTS sp_autenticar_usuario$$
+CREATE PROCEDURE sp_autenticar_usuario (
+    IN p_email VARCHAR(100)
+)
+BEGIN
+    SELECT 
+        id, 
+        nombre, 
+        telefono, 
+        email, 
+        rol_id
+    FROM Usuario
+    WHERE email = p_email
+    LIMIT 1;
+END$$
+
+-- ---------------------------------------
 -- Procedimientos para la tabla Usuario_Rol
------------------------------------------
+-- ---------------------------------------
 -- Nota: Tabla de relación entre Usuario y Roles
 
 -- sp_crear_Usuario_Rol: Inserta una relación entre usuario y rol
@@ -298,9 +316,9 @@ BEGIN
     WHERE usuario_id = p_usuario_id AND rol_id = p_rol_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla Compra
------------------------------------------
+-- ---------------------------------------
 
 -- sp_crear_Compra: Inserta una nueva Compra
 DROP PROCEDURE IF EXISTS sp_crear_Compra$$
@@ -355,9 +373,9 @@ BEGIN
     UPDATE Compra SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla CompraDetalle
------------------------------------------
+-- ---------------------------------------
 
 -- sp_crear_CompraDetalle: Inserta un detalle de compra
 DROP PROCEDURE IF EXISTS sp_crear_CompraDetalle$$
@@ -418,9 +436,9 @@ BEGIN
     UPDATE CompraDetalle SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
 END$$
 
------------------------------------------
+-- ---------------------------------------
 -- Procedimientos para la tabla Ticket
------------------------------------------
+-- ---------------------------------------
 
 -- sp_crear_Ticket: Inserta un nuevo ticket
 DROP PROCEDURE IF EXISTS sp_crear_Ticket$$
