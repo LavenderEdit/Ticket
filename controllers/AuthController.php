@@ -1,13 +1,15 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../models/Usuario.php';
 
 use Database\Database;
 use Models\Usuario;
+use Controllers\Controller;
 
-class AuthController
+class AuthController extends Controller
 {
     private Usuario $usuarioModel;
 
@@ -17,37 +19,82 @@ class AuthController
         $this->usuarioModel = new Usuario($pdo);
     }
 
-    public function login()
+    protected function login(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->sendResponse(405, ['message' => 'Método no permitido.']);
+            exit;
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $this->sendResponse(400, ['message' => 'Datos inválidos o ausentes.']);
+            exit;
+        }
+
+        $correo = trim($data['correo'] ?? '');
+        $password = $data['contra'] ?? '';
+
+        if (empty($correo) || empty($password)) {
+            $this->sendResponse(400, ['message' => 'Correo y contraseña son requeridos.']);
+            exit;
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
-            $correo = $_POST['correo'] ?? '';
-            $password = $_POST['contra'] ?? '';
+        }
 
-            $usuario = $this->usuarioModel->autenticarUsuario($correo, $password);
+        $usuario = $this->usuarioModel->autenticarUsuario($correo, $password);
 
-            if ($usuario) {
-                $_SESSION['usuario'] = [
-                    'id_usuario' => $usuario['id_usuario'],
-                    'nombre' => $usuario['nombre'],
-                    'rol_id' => $usuario['rol_id']
-                ];
+        if ($usuario) {
+            $_SESSION['usuario'] = [
+                'id_usuario' => $usuario['id'],
+                'nombre' => $usuario['nombre'],
+                'rol_id' => $usuario['rol_id']
+            ];
 
-                header("Location: " . "views/dashboard.php");
-                exit;
-            } else {
-                $_SESSION['error_login'] = "Credenciales incorrectas.";
-                header("Location: " . "views/auth/login.php");
-                exit;
-            }
+            $this->sendResponse(200, [
+                'message' => 'Login exitoso.',
+                'usuario' => $usuario
+            ]);
+        } else {
+            $this->sendResponse(401, ['message' => 'Credenciales incorrectas.']);
         }
     }
 
-    public function logout()
+    protected function logout(): void
     {
-        session_start();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->sendResponse(405, ['message' => 'Método no permitido.']);
+            exit;
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         session_destroy();
-        header("Location: " . "/GestorSimple/");
-        exit;
+        $this->sendResponse(200, ['message' => 'Sesión cerrada correctamente.']);
+    }
+
+    // Métodos no implementados para este controlador de autenticación.
+    protected function getAll(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function get(int $id): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function post(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function put(int $id): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function delete(int $id): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
     }
 }
