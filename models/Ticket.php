@@ -23,9 +23,10 @@ class Ticket extends BaseModel
     }
 
     // Procedimientos almacenados
-    public function insertarTicket(string $titulo, ?string $descripcion, string $estado, string $prioridad, int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket, bool $activo)
+
+    public function insertarTicket(string $titulo, ?string $descripcion, string $estado, string $prioridad, int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket)
     {
-        return $this->callProcedure('crear', [$titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket, $activo]);
+        return $this->callProcedure('crear', [$titulo, $descripcion, $estado, $prioridad, $creador_id, $compra_id, $foto_ticket, $pdf_ticket]);
     }
 
     public function editarTicket(int $id, string $titulo, ?string $descripcion, string $estado, string $prioridad, ?int $creador_id, ?int $compra_id, ?string $foto_ticket, ?string $pdf_ticket, bool $activo)
