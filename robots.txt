@@ -1,2 +1,20 @@
-User-agent: *
+User-agent: Googlebot
+Disallow: 
+
+User-agent: Googlebot-Image
+Disallow: 
+
+User-agent: Googlebot-Mobile
+Disallow: 
+
+User-agent: AdsBot-Google
 Disallow:
+
+User-agent: AdsBot-Google-Mobile
+Disallow:
+
+User-agent: *
+Disallow: /security/
+Disallow: /database/
+Disallow: /controllers/
+Disallow: /models/
