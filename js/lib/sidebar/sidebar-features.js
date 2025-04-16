@@ -1,4 +1,3 @@
-// sidebar-features.js
 export function initSidebarFeatures() {
   const sidebar = document.getElementById("app-sidebar");
   const sidebarExpander = document.getElementById("sidebar-expander");
