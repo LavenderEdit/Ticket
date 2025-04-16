@@ -1,6 +1,6 @@
-import { togglePasswordVisibility } from "./script-functions.js";
-import { initSidebar } from "./sidebar/main-sidebar.js";
-import { initSidebarFeatures } from "./sidebar/sidebar-features.js";
+import { togglePasswordVisibility } from "./lib/utils/script-functions.js";
+import { initSidebar } from "./lib/sidebar/main-sidebar.js";
+import { initSidebarFeatures } from "./lib/sidebar/sidebar-features.js";
 
 export function runComponentRegistry() {
   const path = window.location.pathname;
@@ -10,6 +10,10 @@ export function runComponentRegistry() {
     case "login.php":
     case "register.php":
       togglePasswordVisibility();
+      break;
+    case "dashboard.php":
+      initSidebar();
+      initSidebarFeatures();
       break;
     default:
       break;
