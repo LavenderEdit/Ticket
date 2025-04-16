@@ -10,10 +10,10 @@ export function loadPageContent(page) {
       file = "views/home/default.php";
       break;
     case "tickets":
-      file = "views/ventas/ventas.php";
+      file = "views/tickets/tickets.php";
       break;
     case "configuracion":
-      file = "views/clientes/clientes.php";
+      file = "views/config/config.php";
       break;
     default:
       file = "views/error/404.php";
