@@ -1,0 +1,86 @@
+@media screen and (max-width: 320px) {
+    /* Estilos específicos para pantallas muy pequeñas */
+}
+
+@media screen and (min-width: 321px) and (max-width: 480px) {
+    /* Estilos para teléfonos en modo retrato o landscape pequeños */
+}
+
+@media screen and (min-width: 481px) and (max-width: 767px) {
+    /* Estilos para teléfonos de mayor tamaño */
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    /* Estilos para tablets en orientación vertical */
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    /* Estilos para tablets en horizontal y laptops pequeños */
+    /* Login.html */
+    #opacidad-azul {
+        width: 380px !important;
+    }
+
+    #opacidad-azul::before {
+        clip-path: ellipse(100% 62% at 160% 50%) !important;
+    }
+
+    #robot-container {
+        width: 188px !important;
+        height: 208px !important;
+        bottom: 200px !important;
+        right: 60px !important;
+    }
+
+    #robot-image {
+        width: 100px !important;
+    }
+}
+
+@media screen and (min-width: 1367px) and (max-width: 1920px) {
+
+    /* Estilos para pantallas de escritorio comunes (por ejemplo, 1920 x 1080) */
+    /* Login.html */
+    #opacidad-azul {
+        width: 520px !important;
+    }
+
+    #opacidad-azul::before {
+        clip-path: ellipse(90% 70% at 170% 50%) !important;
+    }
+
+    #robot-container {
+        width: 238px !important;
+        height: 258px !important;
+        bottom: 255px !important;
+        right: 130px !important;
+    }
+
+    #robot-image {
+        width: 115px !important;
+    }
+}
+
+@media screen and (min-width: 1921px) {
+
+    /* Estilos para pantallas de muy alta resolución */
+    /* Login.html */
+    #opacidad-azul {
+        width: 520px;
+    }
+
+    #opacidad-azul::before {
+        clip-path: ellipse(85% 75% at 170% 50%) !important;
+    }
+
+    #robot-container {
+        width: 308px !important;
+        height: 318px !important;
+        bottom: 315px !important;
+        right: 150px !important;
+    }
+
+    #robot-image {
+        width: 135px !important;
+    }
+}
