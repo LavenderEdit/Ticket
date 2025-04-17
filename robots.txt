@@ -18,3 +18,4 @@ Disallow: /security/
 Disallow: /database/
 Disallow: /controllers/
 Disallow: /models/
+Disallow: /includes/
