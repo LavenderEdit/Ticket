@@ -9,15 +9,19 @@ import { openModal } from "./modal-manager.js";
  * @param {Function} [options.onCancel=() => {}]
  */
 export function openConfirmModal(options = {}) {
-    const {
-        title = "Confirmación",
-        message = "¿Estás seguro de realizar esta acción?",
-        onConfirm = () => { },
-        onCancel = () => { }
-    } = options;
+  const {
+    title = "Confirmación",
+    message = "¿Estás seguro de realizar esta acción?",
+    confirmText = "Confirmar",
+    cancelText = "Cancelar",
+    onConfirm = () => { },
+    onCancel = () => { }
+  } = options;
 
-    const modalHtml = `
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  const uniqueId = `confirmModal-${Date.now()}`;
+
+  const modalHtml = `
+    <div class="modal fade" id="${uniqueId}" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -28,25 +32,39 @@ export function openConfirmModal(options = {}) {
             <p>${message}</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="confirmBtn">Confirmar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelBtn-${uniqueId}">${cancelText}</button>
+            <button type="button" class="btn btn-primary" id="confirmBtn-${uniqueId}">${confirmText}</button>
           </div>
         </div>
       </div>
     </div>`;
 
-    const modalInstance = openModal(modalHtml);
+  const modalInstance = openModal(modalHtml);
 
-    const modalElement = document.getElementById("confirmModal");
+  const modalElement = document.getElementById(uniqueId);
 
-    modalElement.querySelector("#confirmBtn").addEventListener("click", () => {
+  setTimeout(() => {
+    const confirmBtn = modalElement.querySelector(`#confirmBtn-${uniqueId}`);
+    const cancelBtn = modalElement.querySelector(`#cancelBtn-${uniqueId}`);
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", () => {
         onConfirm();
         modalInstance.hide();
-    });
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => {
+        onCancel();
+      });
+    }
 
     modalElement.addEventListener("hidden.bs.modal", () => {
-        onCancel();
+      modalElement.remove();
     });
 
-    return modalInstance;
+  }, 10);
+
+  return modalInstance;
 }
