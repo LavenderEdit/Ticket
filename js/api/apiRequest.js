@@ -10,9 +10,12 @@ export function apiRequest(controller, action, method = "GET", data = null) {
     }
 
     const ajaxOptions = {
-      url: url,
+      url,
       type: method.toUpperCase(),
       dataType: "json",
+      xhrFields: {
+        withCredentials: true
+      }
     };
 
     if (method.toUpperCase() === "POST") {
