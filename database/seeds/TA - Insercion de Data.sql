@@ -53,14 +53,14 @@ INSERT INTO Rol_Permiso (rol_id, permiso_id) VALUES
 -------------------------------------------------------
 -- Se insertan usuarios reales de diferentes roles:
 INSERT INTO Usuario (nombre, telefono, email, fecha_logeo, contrasena, rol_id) VALUES
-('Juan Perez', '987654321', 'juan.perez@example.com', NULL, 'hashed_password_juan', 1),
-('Ana Martinez', '912345678', 'ana.martinez@example.com', NULL, 'hashed_password_ana', 1),
-('Carlos Sanchez', '998877665', 'carlos.sanchez@example.com', NULL, 'hashed_password_carlos', 2),
-('Laura Gutierrez', '987123456', 'laura.gutierrez@example.com', NULL, 'hashed_password_laura', 2),
-('Maria Lopez', '987112233', 'maria.lopez@example.com', NULL, 'hashed_password_maria', 3),
-('Pedro Rodriguez', '987445566', 'pedro.rodriguez@example.com', NULL, 'hashed_password_pedro', 3),
-('TechSolutions S.A.', '512345678', 'contacto@techsolutions.com', NULL, 'hashed_password_tech', 4),
-('Innovatech Ltda.', '511223344', 'info@innovatech.com', NULL, 'hashed_password_innovatech', 4);
+('Juan Perez', '987654321', 'juan.perez@example.com', NULL, 'hashed_juan', 1),
+('Ana Martinez', '912345678', 'ana.martinez@example.com', NULL, 'hashed_ana', 1),
+('Carlos Sanchez', '998877665', 'carlos.sanchez@example.com', NULL, 'hashed_carlos', 2),
+('Laura Gutierrez', '987123456', 'laura.gutierrez@example.com', NULL, 'hashed_laura', 2),
+('Maria Lopez', '987112233', 'maria.lopez@example.com', NULL, 'hashed_maria', 3),
+('Pedro Rodriguez', '987445566', 'pedro.rodriguez@example.com', NULL, 'hashed_pedro', 3),
+('TechSolutions S.A.', '512345678', 'contacto@techsolutions.com', NULL, 'hashed_tech', 4),
+('Innovatech Ltda.', '511223344', 'info@innovatech.com', NULL, 'hashed_innovatech', 4);
 
 -------------------------------------------------------
 -- Insertar datos en la tabla Usuario_Rol (relación muchos a muchos)
