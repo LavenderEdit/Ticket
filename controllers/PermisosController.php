@@ -80,4 +80,13 @@ class PermisoController extends Controller
             'message' => $resultado ? 'Permiso eliminado correctamente' : 'Error al eliminar el permiso'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
