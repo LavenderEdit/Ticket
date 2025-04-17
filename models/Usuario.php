@@ -21,7 +21,7 @@ class Usuario extends BaseModel
     }
 
     // Procedimientos almacenados
-    public function getUsuarioByCorreo(string $correo)
+    public function getUsuarioByCorreo(string $correo): mixed
     {
         $result = $this->callProcedure('autenticar', [$correo]);
         return ($result && isset($result[0])) ? $result[0] : false;
