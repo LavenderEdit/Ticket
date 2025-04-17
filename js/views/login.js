@@ -1,6 +1,4 @@
-// /js/views/login.js
-
-import { logearUsuario } from '../api/authService.js?v=1';
+import { logearUsuario } from '../api/authService.js?v=3';
 import { togglePasswordVisibility } from '../lib/utils/script-functions.js';
 import { openNotificationModal } from '../components/modal-notification.js';
 
