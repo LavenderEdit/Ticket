@@ -106,4 +106,13 @@ class UsuarioRolController extends Controller
             'message' => $resultado ? 'UsuarioRol eliminado correctamente.' : 'Error al eliminar UsuarioRol.'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
