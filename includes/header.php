@@ -1,3 +1,5 @@
+<?php require_once __DIR__ . '/../security/main-blocker.php' ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
