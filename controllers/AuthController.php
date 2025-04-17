@@ -19,7 +19,7 @@ class AuthController extends Controller
         $this->usuarioModel = new Usuario($pdo);
     }
 
-    protected function login(): void
+    public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->sendResponse(405, ['message' => 'Método no permitido.']);
@@ -62,7 +62,7 @@ class AuthController extends Controller
         }
     }
 
-    protected function logout(): void
+    public function logout(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->sendResponse(405, ['message' => 'Método no permitido.']);
