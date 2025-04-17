@@ -1,183 +1,317 @@
 DELIMITER $$
+
 -- -----------------------------------
--- Procedimientos para la tabla Roles
+-- Procedimientos para la tabla roles
 -- -----------------------------------
--- sp_crear_Roles: Inserta un nuevo registro en Roles
-DROP PROCEDURE IF EXISTS sp_crear_Roles$$
-CREATE PROCEDURE sp_crear_Roles (
+-- sp_crear_roles: Inserta un nuevo registro en roles y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_roles$$
+CREATE PROCEDURE sp_crear_roles (
     IN p_nombre VARCHAR(50),
     IN p_descripcion TEXT
 )
 BEGIN
-    INSERT INTO Roles (nombre, descripcion, activo)
+    INSERT INTO roles (nombre, descripcion, activo)
     VALUES (p_nombre, p_descripcion, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Role creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      ) FROM roles WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_Roles: Actualiza un registro existente en Roles
-DROP PROCEDURE IF EXISTS sp_editar_Roles$$
-CREATE PROCEDURE sp_editar_Roles (
+-- sp_editar_roles: Actualiza un registro existente en roles y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_roles$$
+CREATE PROCEDURE sp_editar_roles (
     IN p_id INT,
     IN p_nombre VARCHAR(50),
     IN p_descripcion TEXT,
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE Roles 
+    UPDATE roles
     SET nombre = p_nombre,
         descripcion = p_descripcion,
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+    
+    SELECT JSON_OBJECT(
+             'message', 'Role actualizado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo,
+                         'fecha_actualizacion', fecha_actualizacion
+                      ) FROM roles WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Roles: Muestra todos los registros activos de Roles
-DROP PROCEDURE IF EXISTS sp_visualizar_Roles$$
-CREATE PROCEDURE sp_visualizar_Roles ()
+-- sp_visualizar_roles: Muestra todos los registros activos de roles en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_roles$$
+CREATE PROCEDURE sp_visualizar_roles ()
 BEGIN
-    SELECT * FROM Roles WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Roles activos',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      )) FROM roles WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Roles: Muestra el registro de Roles por id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Roles$$
-CREATE PROCEDURE sp_visualizar_por_id_Roles (
+-- sp_visualizar_por_id_roles: Muestra el registro de roles por id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_roles$$
+CREATE PROCEDURE sp_visualizar_por_id_roles (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM Roles WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Role encontrado',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      ) FROM roles WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Roles: Soft delete, marca un registro de Roles como inactivo
-DROP PROCEDURE IF EXISTS sp_eliminar_Roles$$
-CREATE PROCEDURE sp_eliminar_Roles (
+-- sp_eliminar_roles: Soft delete, marca un registro de roles como inactivo y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_roles$$
+CREATE PROCEDURE sp_eliminar_roles (
     IN p_id INT
 )
 BEGIN
-    UPDATE Roles SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE roles
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+    
+    SELECT JSON_OBJECT(
+             'message', 'Role eliminado (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo,
+                         'fecha_actualizacion', fecha_actualizacion
+                      ) FROM roles WHERE id = p_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Permisos
+-- Procedimientos para la tabla permisos
 -- ---------------------------------------
 
--- sp_crear_Permisos: Inserta un nuevo registro en Permisos
-DROP PROCEDURE IF EXISTS sp_crear_Permisos$$
-CREATE PROCEDURE sp_crear_Permisos (
+-- sp_crear_permisos: Inserta un nuevo registro en permisos y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_permisos$$
+CREATE PROCEDURE sp_crear_permisos (
     IN p_nombre VARCHAR(50),
     IN p_descripcion TEXT
 )
 BEGIN
-    INSERT INTO Permisos (nombre, descripcion, activo)
+    INSERT INTO permisos (nombre, descripcion, activo)
     VALUES (p_nombre, p_descripcion, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Permiso creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      ) FROM permisos WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_Permisos: Actualiza un registro existente en Permisos
-DROP PROCEDURE IF EXISTS sp_editar_Permisos$$
-CREATE PROCEDURE sp_editar_Permisos (
+-- sp_editar_permisos: Actualiza un registro existente en permisos y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_permisos$$
+CREATE PROCEDURE sp_editar_permisos (
     IN p_id INT,
     IN p_nombre VARCHAR(50),
     IN p_descripcion TEXT,
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE Permisos 
+    UPDATE permisos
     SET nombre = p_nombre,
         descripcion = p_descripcion,
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Permiso actualizado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo,
+                         'fecha_actualizacion', fecha_actualizacion
+                      ) FROM permisos WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Permisos: Muestra todos los registros activos de Permisos
-DROP PROCEDURE IF EXISTS sp_visualizar_Permisos$$
-CREATE PROCEDURE sp_visualizar_Permisos ()
+-- sp_visualizar_permisos: Muestra todos los registros activos de permisos en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_permisos$$
+CREATE PROCEDURE sp_visualizar_permisos ()
 BEGIN
-    SELECT * FROM Permisos WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Permisos activos',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      )) FROM permisos WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Permisos: Muestra el registro de Permisos por id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Permisos$$
-CREATE PROCEDURE sp_visualizar_por_id_Permisos (
+-- sp_visualizar_por_id_permisos: Muestra el registro de permisos por id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_permisos$$
+CREATE PROCEDURE sp_visualizar_por_id_permisos (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM Permisos WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Permiso encontrado',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo
+                      ) FROM permisos WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Permisos: Soft delete, marca un registro de Permisos como inactivo
-DROP PROCEDURE IF EXISTS sp_eliminar_Permisos$$
-CREATE PROCEDURE sp_eliminar_Permisos (
+-- sp_eliminar_permisos: Soft delete, marca un registro de permisos como inactivo y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_permisos$$
+CREATE PROCEDURE sp_eliminar_permisos (
     IN p_id INT
 )
 BEGIN
-    UPDATE Permisos SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE permisos
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Permiso eliminado (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                         'id', id,
+                         'nombre', nombre,
+                         'descripcion', descripcion,
+                         'activo', activo,
+                         'fecha_actualizacion', fecha_actualizacion
+                      ) FROM permisos WHERE id = p_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Rol_Permiso
+-- Procedimientos para la tabla rol_permiso
 -- ---------------------------------------
--- Nota: Para las tablas de relación, se requiere pasar los dos identificadores.
--- sp_crear_Rol_Permiso: Inserta una relación entre rol y permiso
-DROP PROCEDURE IF EXISTS sp_crear_Rol_Permiso$$
-CREATE PROCEDURE sp_crear_Rol_Permiso (
+-- Nota: Para las tablas de relación se requiere pasar los dos identificadores.
+
+-- sp_crear_rol_permiso: Inserta una relación entre rol y permiso y retorna la relación creada en JSON
+DROP PROCEDURE IF EXISTS sp_crear_rol_permiso$$
+CREATE PROCEDURE sp_crear_rol_permiso (
     IN p_rol_id INT,
     IN p_permiso_id INT
 )
 BEGIN
-    INSERT INTO Rol_Permiso (rol_id, permiso_id)
+    INSERT INTO rol_permiso (rol_id, permiso_id)
     VALUES (p_rol_id, p_permiso_id);
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación rol-permiso creada exitosamente',
+             'data', JSON_OBJECT('rol_id', p_rol_id, 'permiso_id', p_permiso_id)
+           ) AS response;
 END$$
 
--- sp_editar_Rol_Permiso: Actualiza una relación (requiere las llaves antiguas para identificar la fila)
-DROP PROCEDURE IF EXISTS sp_editar_Rol_Permiso$$
-CREATE PROCEDURE sp_editar_Rol_Permiso (
+-- sp_editar_rol_permiso: Actualiza una relación en rol_permiso y retorna la nueva relación en JSON
+DROP PROCEDURE IF EXISTS sp_editar_rol_permiso$$
+CREATE PROCEDURE sp_editar_rol_permiso (
     IN p_old_rol_id INT,
     IN p_old_permiso_id INT,
     IN p_new_rol_id INT,
     IN p_new_permiso_id INT
 )
 BEGIN
-    UPDATE Rol_Permiso 
+    UPDATE rol_permiso
     SET rol_id = p_new_rol_id,
         permiso_id = p_new_permiso_id
     WHERE rol_id = p_old_rol_id AND permiso_id = p_old_permiso_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación rol-permiso actualizada exitosamente',
+             'data', JSON_OBJECT('rol_id', p_new_rol_id, 'permiso_id', p_new_permiso_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Rol_Permiso: Muestra todas las relaciones entre roles y permisos
-DROP PROCEDURE IF EXISTS sp_visualizar_Rol_Permiso$$
-CREATE PROCEDURE sp_visualizar_Rol_Permiso ()
+-- sp_visualizar_rol_permiso: Muestra todas las relaciones de rol_permiso en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_rol_permiso$$
+CREATE PROCEDURE sp_visualizar_rol_permiso ()
 BEGIN
-    SELECT * FROM Rol_Permiso;
+    SELECT JSON_OBJECT(
+             'message', 'Relaciones rol-permiso',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                         'rol_id', rol_id,
+                         'permiso_id', permiso_id
+                      )) FROM rol_permiso)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Rol_Permiso: Muestra la relación en función de rol_id y permiso_id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Rol_Permiso$$
-CREATE PROCEDURE sp_visualizar_por_id_Rol_Permiso (
+-- sp_visualizar_por_id_rol_permiso: Muestra la relación específica en rol_permiso en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_rol_permiso$$
+CREATE PROCEDURE sp_visualizar_por_id_rol_permiso (
     IN p_rol_id INT,
     IN p_permiso_id INT
 )
 BEGIN
-    SELECT * FROM Rol_Permiso
-    WHERE rol_id = p_rol_id AND permiso_id = p_permiso_id;
+    SELECT JSON_OBJECT(
+             'message', 'Relación rol-permiso encontrada',
+             'data', (SELECT JSON_OBJECT(
+                         'rol_id', rol_id,
+                         'permiso_id', permiso_id
+                      ) FROM rol_permiso
+                      WHERE rol_id = p_rol_id AND permiso_id = p_permiso_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Rol_Permiso: Elimina (física) una relación de rol y permiso
-DROP PROCEDURE IF EXISTS sp_eliminar_Rol_Permiso$$
-CREATE PROCEDURE sp_eliminar_Rol_Permiso (
+-- sp_eliminar_rol_permiso: Elimina una relación de rol_permiso y retorna confirmación en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_rol_permiso$$
+CREATE PROCEDURE sp_eliminar_rol_permiso (
     IN p_rol_id INT,
     IN p_permiso_id INT
 )
 BEGIN
-    DELETE FROM Rol_Permiso 
+    DELETE FROM rol_permiso
     WHERE rol_id = p_rol_id AND permiso_id = p_permiso_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación rol-permiso eliminada exitosamente',
+             'data', JSON_OBJECT('rol_id', p_rol_id, 'permiso_id', p_permiso_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Usuario
+-- Procedimientos para la tabla usuario
 -- ---------------------------------------
-
--- sp_crear_Usuario: Inserta un nuevo registro en Usuario
-DROP PROCEDURE IF EXISTS sp_crear_Usuario$$
-CREATE PROCEDURE sp_crear_Usuario (
+-- sp_crear_usuario: Inserta un nuevo registro en usuario y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_usuario$$
+CREATE PROCEDURE sp_crear_usuario (
     IN p_nombre VARCHAR(100),
     IN p_telefono VARCHAR(20),
     IN p_email VARCHAR(100),
@@ -186,13 +320,27 @@ CREATE PROCEDURE sp_crear_Usuario (
     IN p_rol_id INT
 )
 BEGIN
-    INSERT INTO Usuario (nombre, telefono, email, fecha_logeo, contrasena, rol_id, activo)
+    INSERT INTO usuario (nombre, telefono, email, fecha_logeo, contrasena, rol_id, activo)
     VALUES (p_nombre, p_telefono, p_email, p_fecha_logeo, p_contrasena, p_rol_id, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Usuario creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'nombre', nombre,
+                        'telefono', telefono,
+                        'email', email,
+                        'rol_id', rol_id,
+                        'activo', activo
+                      ) FROM usuario WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_Usuario: Actualiza datos de un usuario
-DROP PROCEDURE IF EXISTS sp_editar_Usuario$$
-CREATE PROCEDURE sp_editar_Usuario (
+-- sp_editar_usuario: Actualiza un registro en usuario y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_usuario$$
+CREATE PROCEDURE sp_editar_usuario (
     IN p_id INT,
     IN p_nombre VARCHAR(100),
     IN p_telefono VARCHAR(20),
@@ -203,7 +351,7 @@ CREATE PROCEDURE sp_editar_Usuario (
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE Usuario
+    UPDATE usuario
     SET nombre = p_nombre,
         telefono = p_telefono,
         email = p_email,
@@ -213,186 +361,331 @@ BEGIN
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Usuario actualizado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'nombre', nombre,
+                        'telefono', telefono,
+                        'email', email,
+                        'rol_id', rol_id,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM usuario WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Usuario: Muestra todos los usuarios activos
-DROP PROCEDURE IF EXISTS sp_visualizar_Usuario$$
-CREATE PROCEDURE sp_visualizar_Usuario ()
+-- sp_visualizar_usuario: Muestra todos los usuarios activos en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_usuario$$
+CREATE PROCEDURE sp_visualizar_usuario ()
 BEGIN
-    SELECT * FROM Usuario WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Usuarios activos',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                        'id', id,
+                        'nombre', nombre,
+                        'telefono', telefono,
+                        'email', email,
+                        'rol_id', rol_id,
+                        'activo', activo
+                      )) FROM usuario WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Usuario: Muestra un usuario por su id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Usuario$$
-CREATE PROCEDURE sp_visualizar_por_id_Usuario (
+-- sp_visualizar_por_id_usuario: Muestra un usuario por su id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_usuario$$
+CREATE PROCEDURE sp_visualizar_por_id_usuario (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM Usuario WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Usuario encontrado',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'nombre', nombre,
+                        'telefono', telefono,
+                        'email', email,
+                        'rol_id', rol_id,
+                        'activo', activo
+                      ) FROM usuario WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Usuario: Soft delete, marca un usuario como inactivo
-DROP PROCEDURE IF EXISTS sp_eliminar_Usuario$$
-CREATE PROCEDURE sp_eliminar_Usuario (
+-- sp_eliminar_usuario: Soft delete, marca un usuario como inactivo y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_usuario$$
+CREATE PROCEDURE sp_eliminar_usuario (
     IN p_id INT
 )
 BEGIN
-    UPDATE Usuario SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE usuario
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Usuario eliminado (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'nombre', nombre,
+                        'telefono', telefono,
+                        'email', email,
+                        'rol_id', rol_id,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM usuario WHERE id = p_id)
+           ) AS response;
 END$$
 
--- Buscar a un usuario por correo para autenticarlos
+-- sp_autenticar_usuario: Busca un usuario por correo (para autenticación) y retorna los campos requeridos en JSON
 DROP PROCEDURE IF EXISTS sp_autenticar_usuario$$
 CREATE PROCEDURE sp_autenticar_usuario (
     IN p_email VARCHAR(100)
 )
 BEGIN
     SELECT 
-        id, 
-        nombre, 
-        telefono, 
-        email, 
-        rol_id
-    FROM Usuario
+      id,
+      nombre,
+      telefono,
+      email,
+      contrasena,
+      rol_id
+    FROM usuario
     WHERE email = p_email
     LIMIT 1;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Usuario_Rol
+-- Procedimientos para la tabla usuario_rol
 -- ---------------------------------------
--- Nota: Tabla de relación entre Usuario y Roles
+-- Nota: Tabla de relación entre usuario y roles
 
--- sp_crear_Usuario_Rol: Inserta una relación entre usuario y rol
-DROP PROCEDURE IF EXISTS sp_crear_Usuario_Rol$$
-CREATE PROCEDURE sp_crear_Usuario_Rol (
+-- sp_crear_usuario_rol: Inserta una relación entre usuario y rol y retorna la relación en JSON
+DROP PROCEDURE IF EXISTS sp_crear_usuario_rol$$
+CREATE PROCEDURE sp_crear_usuario_rol (
     IN p_usuario_id INT,
     IN p_rol_id INT
 )
 BEGIN
-    INSERT INTO Usuario_Rol (usuario_id, rol_id)
+    INSERT INTO usuario_rol (usuario_id, rol_id)
     VALUES (p_usuario_id, p_rol_id);
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación usuario-rol creada exitosamente',
+             'data', JSON_OBJECT('usuario_id', p_usuario_id, 'rol_id', p_rol_id)
+           ) AS response;
 END$$
 
--- sp_editar_Usuario_Rol: Actualiza la relación (requiere la llave antigua para identificar el registro)
-DROP PROCEDURE IF EXISTS sp_editar_Usuario_Rol$$
-CREATE PROCEDURE sp_editar_Usuario_Rol (
+-- sp_editar_usuario_rol: Actualiza la relación en usuario_rol y retorna la nueva relación en JSON
+DROP PROCEDURE IF EXISTS sp_editar_usuario_rol$$
+CREATE PROCEDURE sp_editar_usuario_rol (
     IN p_old_usuario_id INT,
     IN p_old_rol_id INT,
     IN p_new_usuario_id INT,
     IN p_new_rol_id INT
 )
 BEGIN
-    UPDATE Usuario_Rol
-    SET usuario_id = p_new_usuario_id, rol_id = p_new_rol_id
+    UPDATE usuario_rol
+    SET usuario_id = p_new_usuario_id,
+        rol_id = p_new_rol_id
     WHERE usuario_id = p_old_usuario_id AND rol_id = p_old_rol_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación usuario-rol actualizada exitosamente',
+             'data', JSON_OBJECT('usuario_id', p_new_usuario_id, 'rol_id', p_new_rol_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Usuario_Rol: Muestra todas las relaciones de Usuario_Rol
-DROP PROCEDURE IF EXISTS sp_visualizar_Usuario_Rol$$
-CREATE PROCEDURE sp_visualizar_Usuario_Rol ()
+-- sp_visualizar_usuario_rol: Muestra todas las relaciones en usuario_rol en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_usuario_rol$$
+CREATE PROCEDURE sp_visualizar_usuario_rol ()
 BEGIN
-    SELECT * FROM Usuario_Rol;
+    SELECT JSON_OBJECT(
+             'message', 'Relaciones usuario-rol',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                        'usuario_id', usuario_id,
+                        'rol_id', rol_id
+                      )) FROM usuario_rol)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Usuario_Rol: Muestra la relación según usuario_id y rol_id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Usuario_Rol$$
-CREATE PROCEDURE sp_visualizar_por_id_Usuario_Rol (
+-- sp_visualizar_por_id_usuario_rol: Muestra la relación específica en usuario_rol en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_usuario_rol$$
+CREATE PROCEDURE sp_visualizar_por_id_usuario_rol (
     IN p_usuario_id INT,
     IN p_rol_id INT
 )
 BEGIN
-    SELECT * FROM Usuario_Rol
-    WHERE usuario_id = p_usuario_id AND rol_id = p_rol_id;
+    SELECT JSON_OBJECT(
+             'message', 'Relación usuario-rol encontrada',
+             'data', (SELECT JSON_OBJECT(
+                        'usuario_id', usuario_id,
+                        'rol_id', rol_id
+                      ) FROM usuario_rol
+                      WHERE usuario_id = p_usuario_id AND rol_id = p_rol_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Usuario_Rol: Elimina una relación de Usuario_Rol
-DROP PROCEDURE IF EXISTS sp_eliminar_Usuario_Rol$$
-CREATE PROCEDURE sp_eliminar_Usuario_Rol (
+-- sp_eliminar_usuario_rol: Elimina una relación de usuario_rol y retorna confirmación en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_usuario_rol$$
+CREATE PROCEDURE sp_eliminar_usuario_rol (
     IN p_usuario_id INT,
     IN p_rol_id INT
 )
 BEGIN
-    DELETE FROM Usuario_Rol 
+    DELETE FROM usuario_rol
     WHERE usuario_id = p_usuario_id AND rol_id = p_rol_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Relación usuario-rol eliminada exitosamente',
+             'data', JSON_OBJECT('usuario_id', p_usuario_id, 'rol_id', p_rol_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Compra
+-- Procedimientos para la tabla compra
 -- ---------------------------------------
 
--- sp_crear_Compra: Inserta una nueva Compra
-DROP PROCEDURE IF EXISTS sp_crear_Compra$$
-CREATE PROCEDURE sp_crear_Compra (
+-- sp_crear_compra: Inserta una nueva compra y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_compra$$
+CREATE PROCEDURE sp_crear_compra (
     IN p_tecnico_id INT,
     IN p_total DECIMAL(10,2)
 )
 BEGIN
-    INSERT INTO Compra (tecnico_id, total, activo)
+    INSERT INTO compra (tecnico_id, total, activo)
     VALUES (p_tecnico_id, p_total, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Compra creada exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'tecnico_id', tecnico_id,
+                        'total', total,
+                        'activo', activo
+                      ) FROM compra WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_Compra: Actualiza una Compra existente
-DROP PROCEDURE IF EXISTS sp_editar_Compra$$
-CREATE PROCEDURE sp_editar_Compra (
+-- sp_editar_compra: Actualiza una compra existente y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_compra$$
+CREATE PROCEDURE sp_editar_compra (
     IN p_id INT,
     IN p_tecnico_id INT,
     IN p_total DECIMAL(10,2),
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE Compra
+    UPDATE compra
     SET tecnico_id = p_tecnico_id,
         total = p_total,
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Compra actualizada exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'tecnico_id', tecnico_id,
+                        'total', total,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM compra WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Compra: Muestra todas las Compras activas
-DROP PROCEDURE IF EXISTS sp_visualizar_Compra$$
-CREATE PROCEDURE sp_visualizar_Compra ()
+-- sp_visualizar_compra: Muestra todas las compras activas en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_compra$$
+CREATE PROCEDURE sp_visualizar_compra ()
 BEGIN
-    SELECT * FROM Compra WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Compras activas',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                        'id', id,
+                        'tecnico_id', tecnico_id,
+                        'total', total,
+                        'activo', activo
+                      )) FROM compra WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Compra: Muestra una Compra por id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Compra$$
-CREATE PROCEDURE sp_visualizar_por_id_Compra (
+-- sp_visualizar_por_id_compra: Muestra una compra por id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_compra$$
+CREATE PROCEDURE sp_visualizar_por_id_compra (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM Compra WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Compra encontrada',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'tecnico_id', tecnico_id,
+                        'total', total,
+                        'activo', activo
+                      ) FROM compra WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Compra: Soft delete para Compra
-DROP PROCEDURE IF EXISTS sp_eliminar_Compra$$
-CREATE PROCEDURE sp_eliminar_Compra (
+-- sp_eliminar_compra: Soft delete para compra y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_compra$$
+CREATE PROCEDURE sp_eliminar_compra (
     IN p_id INT
 )
 BEGIN
-    UPDATE Compra SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE compra
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Compra eliminada (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'tecnico_id', tecnico_id,
+                        'total', total,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM compra WHERE id = p_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla CompraDetalle
+-- Procedimientos para la tabla compradetalle
 -- ---------------------------------------
 
--- sp_crear_CompraDetalle: Inserta un detalle de compra
-DROP PROCEDURE IF EXISTS sp_crear_CompraDetalle$$
-CREATE PROCEDURE sp_crear_CompraDetalle (
+-- sp_crear_compradetalle: Inserta un detalle de compra y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_compradetalle$$
+CREATE PROCEDURE sp_crear_compradetalle (
     IN p_compra_id INT,
     IN p_componente VARCHAR(100),
     IN p_cantidad INT,
     IN p_precio DECIMAL(10,2)
 )
 BEGIN
-    INSERT INTO CompraDetalle (compra_id, componente, cantidad, precio, activo)
+    INSERT INTO compradetalle (compra_id, componente, cantidad, precio, activo)
     VALUES (p_compra_id, p_componente, p_cantidad, p_precio, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Detalle de compra creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'compra_id', compra_id,
+                        'componente', componente,
+                        'cantidad', cantidad,
+                        'precio', precio,
+                        'activo', activo
+                      ) FROM compradetalle WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_CompraDetalle: Actualiza un registro en CompraDetalle
-DROP PROCEDURE IF EXISTS sp_editar_CompraDetalle$$
-CREATE PROCEDURE sp_editar_CompraDetalle (
+-- sp_editar_compradetalle: Actualiza un registro en compradetalle y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_compradetalle$$
+CREATE PROCEDURE sp_editar_compradetalle (
     IN p_id INT,
     IN p_compra_id INT,
     IN p_componente VARCHAR(100),
@@ -401,7 +694,7 @@ CREATE PROCEDURE sp_editar_CompraDetalle (
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE CompraDetalle
+    UPDATE compradetalle
     SET compra_id = p_compra_id,
         componente = p_componente,
         cantidad = p_cantidad,
@@ -409,57 +702,122 @@ BEGIN
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Detalle de compra actualizado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'compra_id', compra_id,
+                        'componente', componente,
+                        'cantidad', cantidad,
+                        'precio', precio,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM compradetalle WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_CompraDetalle: Muestra todos los detalles activos
-DROP PROCEDURE IF EXISTS sp_visualizar_CompraDetalle$$
-CREATE PROCEDURE sp_visualizar_CompraDetalle ()
+-- sp_visualizar_compradetalle: Muestra todos los detalles de compra activos en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_compradetalle$$
+CREATE PROCEDURE sp_visualizar_compradetalle ()
 BEGIN
-    SELECT * FROM CompraDetalle WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Detalles de compra activos',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                        'id', id,
+                        'compra_id', compra_id,
+                        'componente', componente,
+                        'cantidad', cantidad,
+                        'precio', precio,
+                        'activo', activo
+                      )) FROM compradetalle WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_CompraDetalle: Muestra un detalle de compra por id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_CompraDetalle$$
-CREATE PROCEDURE sp_visualizar_por_id_CompraDetalle (
+-- sp_visualizar_por_id_compradetalle: Muestra un detalle de compra por id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_compradetalle$$
+CREATE PROCEDURE sp_visualizar_por_id_compradetalle (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM CompraDetalle WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Detalle de compra encontrado',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'compra_id', compra_id,
+                        'componente', componente,
+                        'cantidad', cantidad,
+                        'precio', precio,
+                        'activo', activo
+                      ) FROM compradetalle WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_CompraDetalle: Soft delete en CompraDetalle
-DROP PROCEDURE IF EXISTS sp_eliminar_CompraDetalle$$
-CREATE PROCEDURE sp_eliminar_CompraDetalle (
+-- sp_eliminar_compradetalle: Soft delete en compradetalle y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_compradetalle$$
+CREATE PROCEDURE sp_eliminar_compradetalle (
     IN p_id INT
 )
 BEGIN
-    UPDATE CompraDetalle SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE compradetalle
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Detalle de compra eliminado (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'compra_id', compra_id,
+                        'componente', componente,
+                        'cantidad', cantidad,
+                        'precio', precio,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM compradetalle WHERE id = p_id)
+           ) AS response;
 END$$
 
 -- ---------------------------------------
--- Procedimientos para la tabla Ticket
+-- Procedimientos para la tabla ticket
 -- ---------------------------------------
 
--- sp_crear_Ticket: Inserta un nuevo ticket
-DROP PROCEDURE IF EXISTS sp_crear_Ticket$$
-CREATE PROCEDURE sp_crear_Ticket (
+-- sp_crear_ticket: Inserta un nuevo ticket y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_ticket$$
+CREATE PROCEDURE sp_crear_ticket (
     IN p_titulo VARCHAR(100),
     IN p_descripcion TEXT,
     IN p_estado ENUM('Nuevo','Asignado','Pre Atencion','En Proceso','Culminado'),
     IN p_prioridad ENUM('Alta','Media','Baja'),
     IN p_creador_id INT,
-    IN p_compra_id INT,        -- Puede ser NULL
-    IN p_foto_ticket LONGBLOB,   -- Opcional
-    IN p_pdf_ticket LONGBLOB     -- Opcional
+    IN p_compra_id INT,
+    IN p_foto_ticket LONGBLOB,
+    IN p_pdf_ticket LONGBLOB
 )
 BEGIN
-    INSERT INTO Ticket (titulo, descripcion, estado, prioridad, creador_id, compra_id, foto_ticket, pdf_ticket, activo)
+    INSERT INTO ticket (titulo, descripcion, estado, prioridad, creador_id, compra_id, foto_ticket, pdf_ticket, activo)
     VALUES (p_titulo, p_descripcion, p_estado, p_prioridad, p_creador_id, p_compra_id, p_foto_ticket, p_pdf_ticket, 1);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Ticket creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'titulo', titulo,
+                        'descripcion', descripcion,
+                        'estado', estado,
+                        'prioridad', prioridad,
+                        'creador_id', creador_id,
+                        'compra_id', compra_id,
+                        'activo', activo
+                      ) FROM ticket WHERE id = @last_id)
+           ) AS response;
 END$$
 
--- sp_editar_Ticket: Actualiza un ticket existente
-DROP PROCEDURE IF EXISTS sp_editar_Ticket$$
-CREATE PROCEDURE sp_editar_Ticket (
+-- sp_editar_ticket: Actualiza un ticket existente y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_ticket$$
+CREATE PROCEDURE sp_editar_ticket (
     IN p_id INT,
     IN p_titulo VARCHAR(100),
     IN p_descripcion TEXT,
@@ -472,7 +830,7 @@ CREATE PROCEDURE sp_editar_Ticket (
     IN p_activo TINYINT
 )
 BEGIN
-    UPDATE Ticket
+    UPDATE ticket
     SET titulo = p_titulo,
         descripcion = p_descripcion,
         estado = p_estado,
@@ -484,31 +842,88 @@ BEGIN
         activo = p_activo,
         fecha_actualizacion = CURRENT_TIMESTAMP
     WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Ticket actualizado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'titulo', titulo,
+                        'descripcion', descripcion,
+                        'estado', estado,
+                        'prioridad', prioridad,
+                        'creador_id', creador_id,
+                        'compra_id', compra_id,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM ticket WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_visualizar_Ticket: Muestra todos los tickets activos
-DROP PROCEDURE IF EXISTS sp_visualizar_Ticket$$
-CREATE PROCEDURE sp_visualizar_Ticket ()
+-- sp_visualizar_ticket: Muestra todos los tickets activos en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_ticket$$
+CREATE PROCEDURE sp_visualizar_ticket ()
 BEGIN
-    SELECT * FROM Ticket WHERE activo = 1;
+    SELECT JSON_OBJECT(
+             'message', 'Tickets activos',
+             'data', (SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                        'id', id,
+                        'titulo', titulo,
+                        'descripcion', descripcion,
+                        'estado', estado,
+                        'prioridad', prioridad,
+                        'creador_id', creador_id,
+                        'compra_id', compra_id,
+                        'activo', activo
+                      )) FROM ticket WHERE activo = 1)
+           ) AS response;
 END$$
 
--- sp_visualizar_por_id_Ticket: Muestra un ticket específico por id
-DROP PROCEDURE IF EXISTS sp_visualizar_por_id_Ticket$$
-CREATE PROCEDURE sp_visualizar_por_id_Ticket (
+-- sp_visualizar_por_id_ticket: Muestra un ticket por id en formato JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_ticket$$
+CREATE PROCEDURE sp_visualizar_por_id_ticket (
     IN p_id INT
 )
 BEGIN
-    SELECT * FROM Ticket WHERE id = p_id;
+    SELECT JSON_OBJECT(
+             'message', 'Ticket encontrado',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'titulo', titulo,
+                        'descripcion', descripcion,
+                        'estado', estado,
+                        'prioridad', prioridad,
+                        'creador_id', creador_id,
+                        'compra_id', compra_id,
+                        'activo', activo
+                      ) FROM ticket WHERE id = p_id)
+           ) AS response;
 END$$
 
--- sp_eliminar_Ticket: Soft delete, marca un ticket como inactivo
-DROP PROCEDURE IF EXISTS sp_eliminar_Ticket$$
-CREATE PROCEDURE sp_eliminar_Ticket (
+-- sp_eliminar_ticket: Soft delete, marca un ticket como inactivo y retorna el registro actualizado en JSON
+DROP PROCEDURE IF EXISTS sp_eliminar_ticket$$
+CREATE PROCEDURE sp_eliminar_ticket (
     IN p_id INT
 )
 BEGIN
-    UPDATE Ticket SET activo = 0, fecha_actualizacion = CURRENT_TIMESTAMP WHERE id = p_id;
+    UPDATE ticket
+    SET activo = 0,
+        fecha_actualizacion = CURRENT_TIMESTAMP
+    WHERE id = p_id;
+
+    SELECT JSON_OBJECT(
+             'message', 'Ticket eliminado (soft delete) exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id', id,
+                        'titulo', titulo,
+                        'descripcion', descripcion,
+                        'estado', estado,
+                        'prioridad', prioridad,
+                        'creador_id', creador_id,
+                        'compra_id', compra_id,
+                        'activo', activo,
+                        'fecha_actualizacion', fecha_actualizacion
+                      ) FROM ticket WHERE id = p_id)
+           ) AS response;
 END$$
 
 DELIMITER ;
