@@ -51,7 +51,6 @@ class TicketController extends Controller
         $compra_id = isset($data['compra_id']) ? intval($data['compra_id']) : null;
         $foto_ticket = $data['foto_ticket'] ?? null;
         $pdf_ticket = $data['pdf_ticket'] ?? null;
-        $activo = isset($data['activo']) ? (bool) $data['activo'] : true;
 
         $resultado = $this->ticketModel->insertarTicket(
             $titulo,
@@ -62,7 +61,6 @@ class TicketController extends Controller
             $compra_id,
             $foto_ticket,
             $pdf_ticket,
-            $activo
         );
 
         $this->sendResponse($resultado ? 201 : 500, [
@@ -112,5 +110,14 @@ class TicketController extends Controller
         $this->sendResponse($resultado ? 200 : 500, [
             'message' => $resultado ? 'Ticket eliminado correctamente.' : 'Error al eliminar el ticket.'
         ]);
+    }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
     }
 }
