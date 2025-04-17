@@ -110,4 +110,13 @@ class Rol_PermisoController extends Controller
             'message' => $resultado ? 'Permiso eliminado del rol correctamente.' : 'Error al eliminar permiso del rol.'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
