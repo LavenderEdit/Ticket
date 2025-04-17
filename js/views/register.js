@@ -1,4 +1,4 @@
-import { registrarUsuario } from '../api/usuarioService.js?v=1';
+import { registrarUsuario } from '../api/usuarioService.js?v=3';
 import { togglePasswordVisibility } from '../lib/utils/script-functions.js';
 import { openNotificationModal } from '../components/modal-notification.js';
 
