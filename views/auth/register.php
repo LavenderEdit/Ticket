@@ -30,7 +30,7 @@
                             <i class="me-2 fa-solid fa-envelope"></i>Email
                         </label>
                         <input type="email" class="form-control" id="email" name="email"
-                            placeholder="Correo electrónico" required>
+                            placeholder="Correo electrónico" autocomplete="email" required>
                     </div>
                     <!-- Contraseña -->
                     <div class="mb-3 text-start">
