@@ -1,6 +1,7 @@
-import { togglePasswordVisibility } from "./lib/utils/script-functions.js";
 import { initSidebar } from "./lib/sidebar/main-sidebar.js";
 import { initSidebarFeatures } from "./lib/sidebar/sidebar-features.js";
+import { initRegisterForm } from "./views/register.js?v=1";
+import { initLoginForm } from "./views/login.js?v=2";
 
 export function runComponentRegistry() {
   const path = window.location.pathname;
@@ -8,8 +9,10 @@ export function runComponentRegistry() {
 
   switch (pageName) {
     case "login.php":
+      initLoginForm();
+      break;
     case "register.php":
-      togglePasswordVisibility();
+      initRegisterForm();
       break;
     case "dashboard.php":
       initSidebar();
