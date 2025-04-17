@@ -82,4 +82,13 @@ class CompraDetalleController extends Controller
             'message' => $resultado ? 'CompraDetalle eliminado correctamente.' : 'Error al eliminar CompraDetalle.'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
