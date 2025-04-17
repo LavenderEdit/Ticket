@@ -1,5 +1,3 @@
-<?php require_once __DIR__ . '/../security/main-blocker.php' ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -11,7 +9,7 @@
     <title> JhardSystex </title>
     <base href="/Ticket/">
     <link rel="icon" href="images/iconos/icon-robot.webp" type="image/x-icon">
-    <link rel="stylesheet" href="css/main-style.css?v=4">
+    <link rel="stylesheet" href="css/main-style.css?v=8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,4 +18,5 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
