@@ -45,9 +45,9 @@ class UsuarioController extends Controller
 
         $resultado = $this->usuarioModel->insertarUsuario(
             $data['nombre'] ?? '',
-            $data['telefono'] ?? '',
+            (!empty($data['telefono'])) ? $data['telefono'] : null,
             $data['email'] ?? '',
-            $data['fecha_logeo'] ?? '',
+            (!empty($data['fecha_logeo'])) ? $data['fecha_logeo'] : null,
             $data['contrasena'] ?? '',
             $data['id_rol'] ?? null
         );
@@ -87,5 +87,14 @@ class UsuarioController extends Controller
         $this->sendResponse($resultado ? 200 : 500, [
             'message' => $resultado ? 'Usuario eliminado' : 'Error al eliminar'
         ]);
+    }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
     }
 }
