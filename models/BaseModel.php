@@ -37,7 +37,7 @@ class BaseModel
      */
     public function callProcedure($tipo, $params = [])
     {
-        $className = strtolower((new \ReflectionClass($this))->getShortName());
+        $className = (new \ReflectionClass($this))->getShortName();
         $sp_name = "sp_" . $tipo . "_" . $className;
         return $this->ejecutarProcedimiento($sp_name, $params);
     }
