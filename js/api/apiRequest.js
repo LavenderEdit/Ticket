@@ -28,22 +28,14 @@ export function apiRequest(controller, action, method = "GET", data = null) {
 
     $.ajax(ajaxOptions)
       .done((responseData, textStatus, jqXHR) => {
-        if (jqXHR.status === 200) {
+        if (jqXHR.status >= 200 && jqXHR.status < 300) {
           resolve(responseData);
         } else {
-          reject(
-            new Error(
-              `Error en la solicitud: ${jqXHR.status} ${jqXHR.statusText}`
-            )
-          );
+          reject(new Error(`Error en la solicitud: ${jqXHR.status} ${jqXHR.statusText}`));
         }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
-        reject(
-          new Error(
-            `Error en la solicitud: ${jqXHR.status} ${jqXHR.statusText}`
-          )
-        );
+        reject(new Error(`Error en la solicitud: ${jqXHR.status} ${jqXHR.statusText}`));
       });
   });
 }
