@@ -80,4 +80,13 @@ class RolesController extends Controller
             'message' => $resultado ? 'Rol eliminado correctamente' : 'Error al eliminar el rol'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
