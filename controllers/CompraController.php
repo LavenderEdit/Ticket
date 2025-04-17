@@ -78,4 +78,13 @@ class CompraController extends Controller
             'message' => $resultado ? 'Compra eliminada correctamente.' : 'Error al eliminar Compra.'
         ]);
     }
+
+    protected function login(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
+    protected function logout(): void
+    {
+        $this->sendResponse(405, ['message' => 'Método no implementado.']);
+    }
 }
