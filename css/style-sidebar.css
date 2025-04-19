@@ -1,34 +1,53 @@
-#app-sidebar.sidebar-custom {
-    width: 250px;
+/* COLOR DE FONDO DEL SIDEBAR COMPLETO */
+.sidebar-custom {
+    background-color: #1D5AB3;
 }
 
-#app-sidebar.sidebar-custom .nav-link {
-    color: white;
+/* ESTILO GENERAL DE LOS LINKS */
+.sidebar-custom .nav-link {
+    color: white !important;
+    background-color: transparent;
+    border-radius: 0.5rem;
     padding: 0.75rem 1.5rem;
     position: relative;
-    border-radius: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
 }
 
-#app-sidebar.sidebar-custom .nav-link:hover {
+/* EFECTO HOVER (opcional si quieres dejarlo más claro) */
+.sidebar-custom .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-#app-sidebar.sidebar-custom .nav-link.active {
-    background-color: transparent;
-    font-weight: bold;
+/* ESTILO PARA EL ÍTEM ACTIVO */
+.sidebar-custom .nav-link.active {
+    background-color: #ffffff !important; /* BLANCO sólido */
+    color: #1D5AB3 !important;            /* LETRAS e íconos azul del fondo */
+    font-weight: 600;
 }
 
-#app-sidebar.sidebar-custom .nav-link.active::after {
+/* Color del ícono cuando está activo */
+.sidebar-custom .nav-link.active i {
+    color: #1D5AB3 !important;
+}
+
+/* Color del texto cuando está activo */
+.sidebar-custom .nav-link.active span {
+    color: #1D5AB3 !important;
+}
+
+/* TRIÁNGULO BLANCO AL LADO DERECHO */
+.sidebar-custom .nav-link.active::after {
     content: "";
     position: absolute;
     top: 0;
-    right: -15px;
-    width: 30px;
-    height: 100%;
-    background: white;
-    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    right: -14px;
+    width: 0;
+    height: 0;
+    border-top: 24px solid transparent;
+    border-bottom: 24px solid transparent;
+    border-left: 14px solid white;
 }
 
-#sidebar-expander {
-    left: 250px !important;
-}
