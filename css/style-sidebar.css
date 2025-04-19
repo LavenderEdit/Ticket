@@ -1,9 +1,21 @@
-/* COLOR DE FONDO DEL SIDEBAR COMPLETO */
+/* ------------------------------ */
+/* COLOR DE FONDO DEL SIDEBAR    */
+/* ------------------------------ */
 .sidebar-custom {
+    width: 250px;
     background-color: #1D5AB3;
+    transition: all 0.3s ease;
+    z-index: 1040;
 }
 
-/* ESTILO GENERAL DE LOS LINKS */
+/* OCULTAR SIDEBAR (cuando no tiene la clase show) */
+#app-sidebar:not(.show) {
+    transform: translateX(-100%);
+}
+
+/* ------------------------------ */
+/* ESTILO GENERAL DE LOS LINKS   */
+/* ------------------------------ */
 .sidebar-custom .nav-link {
     color: white !important;
     background-color: transparent;
@@ -16,29 +28,29 @@
     font-weight: 500;
 }
 
-/* EFECTO HOVER (opcional si quieres dejarlo más claro) */
+/* EFECTO HOVER */
 .sidebar-custom .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ESTILO PARA EL ÍTEM ACTIVO */
+/* ------------------------------ */
+/* ESTILO PARA EL ÍTEM ACTIVO    */
+/* ------------------------------ */
 .sidebar-custom .nav-link.active {
-    background-color: #ffffff !important; /* BLANCO sólido */
-    color: #1D5AB3 !important;            /* LETRAS e íconos azul del fondo */
+    background-color: #ffffff !important;
+    color: #1D5AB3 !important;
     font-weight: 600;
 }
 
-/* Color del ícono cuando está activo */
 .sidebar-custom .nav-link.active i {
     color: #1D5AB3 !important;
 }
 
-/* Color del texto cuando está activo */
 .sidebar-custom .nav-link.active span {
     color: #1D5AB3 !important;
 }
 
-/* TRIÁNGULO BLANCO AL LADO DERECHO */
+/* TRIÁNGULO BLANCO A LA DERECHA */
 .sidebar-custom .nav-link.active::after {
     content: "";
     position: absolute;
@@ -51,3 +63,22 @@
     border-left: 14px solid white;
 }
 
+/* ------------------------------ */
+/* BOTÓN HAMBURGUESA             */
+/* ------------------------------ */
+#sidebarToggle {
+    z-index: 1050;
+    background: none;
+    border: none;
+    padding: 0;
+    position: absolute;
+    right: -50px; /* sigue estando fuera del sidebar */
+    top: 22px; /* ajusta este valor según el alto del header */
+    transform: none; /* ya no necesitamos centrar verticalmente */
+}
+
+/* ÍCONO DENTRO DEL BOTÓN */
+#sidebarToggle i {
+    font-size: 1.4rem;
+    color: #212529;
+}
