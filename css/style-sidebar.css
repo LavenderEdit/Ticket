@@ -64,21 +64,17 @@
 }
 
 /* ------------------------------ */
-/* BOTÓN HAMBURGUESA             */
+/* BOTÓN HAMBURGUESA DENTRO DEL HEADER DEL SIDEBAR */
 /* ------------------------------ */
 #sidebarToggle {
-    z-index: 1050;
     background: none;
     border: none;
     padding: 0;
-    position: absolute;
-    right: -50px; /* sigue estando fuera del sidebar */
-    top: 22px; /* ajusta este valor según el alto del header */
-    transform: none; /* ya no necesitamos centrar verticalmente */
+    margin-left: 0.5rem; /* separa un poco del texto */
+    cursor: pointer;
 }
 
-/* ÍCONO DENTRO DEL BOTÓN */
 #sidebarToggle i {
     font-size: 1.4rem;
-    color: #212529;
+    color: #000000; /* blanco si tu fondo del sidebar es azul oscuro */
 }
