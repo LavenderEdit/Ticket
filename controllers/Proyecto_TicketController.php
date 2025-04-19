@@ -2,36 +2,36 @@
 namespace Controllers;
 
 require_once __DIR__ . '/../database/database.php';
-require_once __DIR__ . '/../models/Workspace.php';
+require_once __DIR__ . '/../models/Proyecto_Ticket.php';
 require_once __DIR__ . '/../controllers/Controller.php';
 
 use Database\Database;
-use Models\Workspace;
+use Models\Proyecto_Ticket;
 use Controllers\Controller;
 
-class WorkspaceController extends Controller
+class UsuarioWorkspaceController extends Controller
 {
-    private Workspace $workspaceModel;
+    private Proyecto_Ticket $proyectoTicketeModel;
 
     public function __construct()
     {
         $pdo = Database::getConnection();
-        $this->workspaceModel = new Workspace($pdo);
+        $this->proyectoTicketeModel = new Proyecto_Ticket($pdo);
     }
 
     protected function getAll(): void
     {
-        $workspace = $this->workspaceModel->visualizarWorkspaces();
-        $this->sendResponse(200, $workspace);
+        $proyectoTickets = $this->proyectoTicketeModel->visualizarProyectoTickets();
+        $this->sendResponse(200, $proyectoTickets);
     }
 
     protected function get(int $id): void
     {
-        $workspace = $this->workspaceModel->visualizarWorkspacePorId($id);
-        if ($workspace) {
-            $this->sendResponse(200, $workspace);
+        $proyectoTickets = $this->proyectoTicketeModel->visualizarProyectoTicketPorId($id, $id);
+        if ($proyectoTickets) {
+            $this->sendResponse(200, $proyectoTickets);
         } else {
-            $this->sendResponse(404, ['message' => 'workspace no encontrado.']);
+            $this->sendResponse(404, ['message' => 'Proyecto Ticket no encontrado.']);
         }
     }
 
@@ -43,15 +43,15 @@ class WorkspaceController extends Controller
             return;
         }
 
-        $resultado = $this->workspaceModel->insertarWorkspace(
-            $data['nombre'] ?? '',
-            $data['descripcion'] ?? null,
-            $data['icono'] ?? null,
-            $data['created_by']
+        $resultado = $this->proyectoTicketeModel->insertarProyectoTicket(
+            $data['id_ticket'],
+            $data['id_proyecto'],
+            $data['assigned_by']
+         
         );
 
         $this->sendResponse($resultado ? 201 : 500, [
-            'message' => $resultado ? 'workspace creado correctamente' : 'Error al crear el workspace'
+            'message' => $resultado ? 'Proyecto Ticket creado correctamente' : 'Error al crear el Proyecto Ticket'
         ]);
     }
 
@@ -63,25 +63,23 @@ class WorkspaceController extends Controller
             return;
         }
 
-        $resultado = $this->workspaceModel->editarworkspace(
-            $id,
-            $data['nombre'] ?? '',
-            $data['descripcion'] ?? null,
-            $data['activo'] ?? true,
-            $data['updated_at'],
-            $data['updated_by'] ?? null
+        $resultado = $this->proyectoTicketeModel->editarProyectoTicket(
+            $data['id_ticket'],
+            $data['id_proyecto'],
+            $data['assigned_by']
+   
         );
 
         $this->sendResponse($resultado ? 200 : 500, [
-            'message' => $resultado ? 'workspace actualizado correctamente' : 'Error al actualizar el workspace'
+            'message' => $resultado ? 'Proyecto Ticket actualizado correctamente' : 'Error al actualizar el Proyecto Ticket'
         ]);
     }
 
     protected function delete(int $id): void
     {
-        $resultado = $this->workspaceModel->eliminarworkspace($id);
+        $resultado = $this->proyectoTicketeModel->eliminarProyectoTicket($id,$id);
         $this->sendResponse($resultado ? 200 : 500, [
-            'message' => $resultado ? 'workspace eliminado correctamente' : 'Error al eliminar el workspace'
+            'message' => $resultado ? 'Proyecto Ticket eliminado correctamente' : 'Error al eliminar el Proyecto Ticket'
         ]);
     }
 
