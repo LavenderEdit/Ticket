@@ -1,34 +1,84 @@
-#app-sidebar.sidebar-custom {
+/* ------------------------------ */
+/* COLOR DE FONDO DEL SIDEBAR    */
+/* ------------------------------ */
+.sidebar-custom {
     width: 250px;
+    background-color: #1D5AB3;
+    transition: all 0.3s ease;
+    z-index: 1040;
 }
 
-#app-sidebar.sidebar-custom .nav-link {
-    color: white;
+/* OCULTAR SIDEBAR (cuando no tiene la clase show) */
+#app-sidebar:not(.show) {
+    transform: translateX(-100%);
+}
+
+/* ------------------------------ */
+/* ESTILO GENERAL DE LOS LINKS   */
+/* ------------------------------ */
+.sidebar-custom .nav-link {
+    color: white !important;
+    background-color: transparent;
+    border-radius: 0.5rem;
     padding: 0.75rem 1.5rem;
     position: relative;
-    border-radius: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
 }
 
-#app-sidebar.sidebar-custom .nav-link:hover {
+/* EFECTO HOVER */
+.sidebar-custom .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-#app-sidebar.sidebar-custom .nav-link.active {
-    background-color: transparent;
-    font-weight: bold;
+/* ------------------------------ */
+/* ESTILO PARA EL ÍTEM ACTIVO    */
+/* ------------------------------ */
+.sidebar-custom .nav-link.active {
+    background-color: #ffffff !important;
+    color: #1D5AB3 !important;
+    font-weight: 600;
 }
 
-#app-sidebar.sidebar-custom .nav-link.active::after {
+.sidebar-custom .nav-link.active i {
+    color: #1D5AB3 !important;
+}
+
+.sidebar-custom .nav-link.active span {
+    color: #1D5AB3 !important;
+}
+
+/* TRIÁNGULO BLANCO A LA DERECHA */
+.sidebar-custom .nav-link.active::after {
     content: "";
     position: absolute;
     top: 0;
-    right: -15px;
-    width: 30px;
-    height: 100%;
-    background: white;
-    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    right: -14px;
+    width: 0;
+    height: 0;
+    border-top: 24px solid transparent;
+    border-bottom: 24px solid transparent;
+    border-left: 14px solid white;
 }
 
-#sidebar-expander {
-    left: 250px !important;
+/* ------------------------------ */
+/* BOTÓN HAMBURGUESA             */
+/* ------------------------------ */
+#sidebarToggle {
+    z-index: 1050;
+    background: none;
+    border: none;
+    padding: 0;
+    position: absolute;
+    right: -50px; /* sigue estando fuera del sidebar */
+    top: 22px; /* ajusta este valor según el alto del header */
+    transform: none; /* ya no necesitamos centrar verticalmente */
+}
+
+/* ÍCONO DENTRO DEL BOTÓN */
+#sidebarToggle i {
+    font-size: 1.4rem;
+    color: #212529;
 }
