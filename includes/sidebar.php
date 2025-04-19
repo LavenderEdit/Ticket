@@ -1,17 +1,17 @@
 <!-- Sidebar -->
 <div id="app-sidebar" class="collapse show vh-100 position-fixed d-flex flex-column sidebar-custom">
 
-    <!-- Header -->
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom border-primary position-relative">
-        <a href="./index.php" class="text-white text-decoration-none d-flex align-items-center">
-            <i class="fas fa-store fa-lg me-2"></i>
-            <span class="h5 mb-0 fw-bold">JhardSystex</span>
-        </a>
+    <!-- Header con hamburguesa al lado del nombre -->
+    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom border-primary">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-store fa-lg me-2 text-white"></i>
+            <span class="h5 mb-0 fw-bold text-white me-2">JhardSystex</span>
 
-        <!-- Hamburguesa flotante al costado del logo -->
-        <button id="sidebarToggle" class="btn btn-light position-absolute top-0 end-0 translate-middle-y mt-3 me-n4">
-            <i class="fas fa-bars text-dark"></i>
-        </button>
+            <!-- Hamburguesa al lado del nombre -->
+            <button id="sidebarToggle" class="btn p-0 m-0 ms-2 d-flex align-items-center">
+                <i class="fas fa-bars text-white fs-5"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Nav -->
