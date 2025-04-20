@@ -962,6 +962,7 @@ CREATE PROCEDURE sp_editar_workspace(
     IN p_nombre VARCHAR(150),
     IN p_descripcion TEXT,
     IN p_icono LONGBLOB,
+    IN p_activo TINYINT,
     IN p_invite_code TEXT,
     IN p_updated_by INT
 )
@@ -971,6 +972,7 @@ BEGIN
         nombre       = p_nombre,
         descripcion  = p_descripcion,
         icono        = p_icono,
+        activo       = p_activo,
         invite_code  = p_invite_code,
         updated_by   = p_updated_by
     WHERE id_workspace = p_id_workspace;
