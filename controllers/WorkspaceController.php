@@ -46,7 +46,6 @@ class WorkspaceController extends Controller
         $resultado = $this->workspaceModel->insertarWorkspace(
             $data['nombre'] ?? '',
             $data['descripcion'] ?? null,
-            $data['icono'] ?? null,
             $data['created_by']
         );
 
@@ -67,8 +66,9 @@ class WorkspaceController extends Controller
             $id,
             $data['nombre'] ?? '',
             $data['descripcion'] ?? null,
+            $data['icono'] ?? null,
             $data['activo'] ?? true,
-            $data['updated_at'],
+            $data['invite_code'] ?? null,
             $data['updated_by'] ?? null
         );
 
@@ -79,10 +79,26 @@ class WorkspaceController extends Controller
 
     protected function delete(int $id): void
     {
-        $resultado = $this->workspaceModel->eliminarworkspace($id);
-        $this->sendResponse($resultado ? 200 : 500, [
-            'message' => $resultado ? 'workspace eliminado correctamente' : 'Error al eliminar el workspace'
-        ]);
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        $id_usuario = $_SESSION['usuario']['id_usuario'] ?? null;
+        if (!$id_usuario) {
+            $this->sendResponse(401, ['message' => 'No autorizado.']);
+            return;
+        }
+
+        $resultado = $this->workspaceModel->eliminarworkspace($id, $id_usuario);
+
+        $this->sendResponse(
+            $resultado ? 200 : 404,
+            [
+                'message' => $resultado
+                    ? 'Workspace eliminado correctamente.'
+                    : 'No se encontró el workspace o no tienes permisos.'
+            ]
+        );
     }
 
     protected function login(): void
