@@ -110,6 +110,7 @@ CREATE TABLE Workspace (
   descripcion      TEXT            NULL,
   icono            LONGBLOB        NULL,
   activo           TINYINT(1)      NOT NULL DEFAULT 1,
+  invite_code      TEXT            NULL,
   created_at       TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_by       INT             NULL,
   updated_at       TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
