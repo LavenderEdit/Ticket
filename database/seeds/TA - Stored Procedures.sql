@@ -926,4 +926,141 @@ BEGIN
            ) AS response;
 END$$
 
+-- ---------------------------------------
+-- Procedimientos para la tabla workspace
+-- ---------------------------------------
+
+-- sp_crear_workspace: Inserta un nuevo workspace y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_crear_workspace$$
+CREATE PROCEDURE sp_crear_workspace (
+    IN p_nombre VARCHAR(100),
+    IN p_descripcion TEXT,
+    IN p_created_by INT
+)
+BEGIN
+    INSERT INTO workspace (nombre, descripcion, activo, created_by)
+    VALUES (p_nombre, p_descripcion, 1, p_created_by);
+
+    SET @last_id = LAST_INSERT_ID();
+
+    SELECT JSON_OBJECT(
+             'message', 'Workspace creado exitosamente',
+             'data', (SELECT JSON_OBJECT(
+                        'id_workspace', id_workspace,
+                        'nombre', nombre,
+                        'descripcion', descripcion,
+                        'activo', activo
+                      ) FROM workspace WHERE id_workspace = @last_id)
+           ) AS response;
+END$$
+
+
+-- sp_editar_workspace: Editar un workspace y retorna el registro insertado en JSON
+DROP PROCEDURE IF EXISTS sp_editar_workspace$$
+CREATE PROCEDURE sp_editar_workspace(
+    IN p_id_workspace INT,
+    IN p_nombre VARCHAR(150),
+    IN p_descripcion TEXT,
+    IN p_icono LONGBLOB,
+    IN p_invite_code TEXT,
+    IN p_updated_by INT
+)
+BEGIN
+    UPDATE Workspace
+    SET 
+        nombre       = p_nombre,
+        descripcion  = p_descripcion,
+        icono        = p_icono,
+        invite_code  = p_invite_code,
+        updated_by   = p_updated_by
+    WHERE id_workspace = p_id_workspace;
+
+    SELECT JSON_OBJECT(
+      'message', 'Workspace actualizado exitosamente',
+      'data', JSON_OBJECT(
+          'id_workspace' , id_workspace,
+          'nombre'       , nombre,
+          'descripcion'  , descripcion,
+          'icono'        , TO_BASE64(icono),
+          'invite_code'  , invite_code,
+          'activo'       , activo,
+          'created_at'   , DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s'),
+          'created_by'   , created_by,
+          'updated_at'   , DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s'),
+          'updated_by'   , updated_by
+      )
+    ) AS response
+    FROM Workspace
+    WHERE id_workspace = p_id_workspace;
+END$$
+
+
+-- sp_eliminar_workspace: Eliminar un workspace de forma sencilla y reutilizable
+CREATE PROCEDURE sp_eliminar_workspace(
+    IN p_id_workspace INT,
+    IN p_updated_by     INT
+)
+BEGIN
+    UPDATE Workspace
+    SET 
+        activo     = 0,
+        updated_by = p_updated_by
+    WHERE id_workspace = p_id_workspace;
+
+    SELECT JSON_OBJECT(
+      'message', 'Workspace desactivado correctamente',
+      'id_workspace', p_id_workspace
+    ) AS response;
+END$$
+
+
+-- sp_visualizar_workspace: Visualizar todos los workspaces y subirlo como arreglo en JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_workspace$$
+CREATE PROCEDURE sp_visualizar_workspace()
+BEGIN
+    SELECT JSON_OBJECT(
+      'message', 'Listado de workspaces',
+      'data', JSON_ARRAYAGG(
+          JSON_OBJECT(
+              'id_workspace' , id_workspace,
+              'nombre'       , nombre,
+              'descripcion'  , descripcion,
+              'icono'        , TO_BASE64(icono),
+              'invite_code'  , invite_code,
+              'activo'       , activo,
+              'created_at'   , DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s'),
+              'updated_at'   , DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s')
+          )
+      )
+    ) AS response
+    FROM Workspace;
+END$$
+
+
+-- sp_visualizar_por_id_workspace: Visualizar un workspace por id y subirlo como JSON
+DROP PROCEDURE IF EXISTS sp_visualizar_por_id_workspace$$
+CREATE PROCEDURE sp_visualizar_por_id_workspace(
+    IN p_id_workspace INT
+)
+BEGIN
+    SELECT JSON_OBJECT(
+      'message', 'Workspace encontrado',
+      'data', JSON_OBJECT(
+          'id_workspace' , id_workspace,
+          'nombre'       , nombre,
+          'descripcion'  , descripcion,
+          'icono'        , TO_BASE64(icono),
+          'invite_code'  , invite_code,
+          'activo'       , activo,
+          'created_at'   , DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s'),
+          'created_by'   , created_by,
+          'updated_at'   , DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s'),
+          'updated_by'   , updated_by
+      )
+    ) AS response
+    FROM Workspace
+    WHERE id_workspace = p_id_workspace;
+END$$
+
+
 DELIMITER ;
