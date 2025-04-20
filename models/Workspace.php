@@ -9,6 +9,7 @@ class Workspace extends BaseModel
     private ?string $descripcion;
     private ?string $icono;
     private bool $activo;
+    private ?string $invite_code;
     private string $created_at;
     private ?int $created_by;
     private string $updated_at;
@@ -20,14 +21,19 @@ class Workspace extends BaseModel
     }
 
     // Procedimientos almacenados
-    public function insertarWorkspace(string $nombre, ?string $descripcion, ?string $icono,int $created_by)
+    public function insertarWorkspace(string $nombre, ?string $descripcion, int $created_by)
     {
-        return $this->callProcedure('crear', [$nombre, $descripcion,$icono,$created_by]);
+        return $this->callProcedure('crear', [$nombre, $descripcion, $created_by]);
     }
 
-    public function editarWorkspace(int $id_workspace, string $nombre, ?string $descripcion, bool $activo, string $updated_at, ?int $updated_by)
+    public function editarWorkspace(int $id_workspace, string $nombre, ?string $descripcion, ?string $icono, bool $activo, ?string $invite_code, ?int $updated_by)
     {
-        return $this->callProcedure('editar', [$id_workspace, $nombre, $descripcion, $activo, $updated_at,$updated_by]);
+        return $this->callProcedure('editar', [$id_workspace, $nombre, $descripcion, $icono, $activo, $invite_code, $updated_by]);
+    }
+
+    public function eliminarWorkspace(int $id_workspace, ?int $updated_by)
+    {
+        return $this->callProcedure('eliminar', [$id_workspace, $updated_by]);
     }
 
     public function visualizarWorkspaces()
@@ -38,11 +44,6 @@ class Workspace extends BaseModel
     public function visualizarWorkspacePorId(int $id_workspace)
     {
         return $this->callProcedure('visualizar_por_id', [$id_workspace]);
-    }
-
-    public function eliminarWorkspace(int $id_workspace)
-    {
-        return $this->callProcedure('eliminar', [$id_workspace]);
     }
 
     //Getters y Setters
@@ -61,7 +62,8 @@ class Workspace extends BaseModel
     public function getIcono()
     {
         return $this->icono;
-    }public function isActivo()
+    }
+    public function isActivo()
     {
         return $this->activo;
     }
