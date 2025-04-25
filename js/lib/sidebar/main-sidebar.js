@@ -1,5 +1,5 @@
 import { sidebarConfig } from "./sidebar-config.js";
-import { loadPageContent } from "../utils/dynamic-loader.js";
+import { loadPageContent } from "../utils/dynamic-loader.js?v=1";
 
 export function initSidebar() {
   const { sidebarId, contentClass, sidebarWidth } = sidebarConfig;
@@ -28,10 +28,10 @@ export function initSidebar() {
       e.preventDefault();
       const page = this.getAttribute("data-page");
 
-      loadPageContent(page);
-
       sidebarLinks.forEach((l) => l.classList.remove("active", "bg-primary"));
       this.classList.add("active", "bg-primary");
+
+      loadPageContent(page);
     });
   });
 
