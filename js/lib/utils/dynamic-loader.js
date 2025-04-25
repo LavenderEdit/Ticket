@@ -1,5 +1,9 @@
-const pageCallbacks = {
+import { initCard } from "../card/main-card.js";
 
+const pageCallbacks = {
+  dashboard: () => {
+    initCard();
+  },
 };
 
 export function loadPageContent(page) {
