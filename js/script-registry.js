@@ -1,4 +1,4 @@
-import { initSidebar } from "./lib/sidebar/main-sidebar.js";
+import { initSidebar } from "./lib/sidebar/main-sidebar.js?v=2";
 import { initSidebarFeatures } from "./lib/sidebar/sidebar-features.js";
 import { initRegisterForm } from "./views/register.js?v=3";
 import { initLoginForm } from "./views/login.js?v=4";
