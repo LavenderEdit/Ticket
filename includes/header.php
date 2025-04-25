@@ -9,7 +9,7 @@
     <title> JhardSystex </title>
     <base href="/Ticket/">
     <link rel="icon" href="images/iconos/icon-robot.webp" type="image/x-icon">
-    <link rel="stylesheet" href="css/main-style.css?v=11">
+    <link rel="stylesheet" href="css/main-style.css?v=14">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
