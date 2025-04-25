@@ -57,7 +57,7 @@
 
         <div class="col-lg-9 card-content">
             <div id="main-card" class="card">
-
+                <!-- Carga de las tarjetas con contenido dinamico inyectado dentro del contenido dinamico -->
             </div>
         </div>
     </div>
