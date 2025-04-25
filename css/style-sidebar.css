@@ -1,56 +1,44 @@
-/* ------------------------------ */
-/* COLOR DE FONDO DEL SIDEBAR    */
-/* ------------------------------ */
 .sidebar-custom {
-    width: 250px;
+    width: 300px;
     background-color: #1D5AB3;
+    transform: translateX(0);
     transition: all 0.3s ease;
+    overflow: hidden;
     z-index: 1040;
 }
 
-/* OCULTAR SIDEBAR (cuando no tiene la clase show) */
 #app-sidebar:not(.show) {
     transform: translateX(-100%);
+    transition: all 0.3s ease;
 }
 
-/* ------------------------------ */
-/* ESTILO GENERAL DE LOS LINKS   */
-/* ------------------------------ */
 .sidebar-custom .nav-link {
     color: white !important;
     background-color: transparent;
     border-radius: 0.5rem;
     padding: 0.75rem 1.5rem;
     position: relative;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
     display: flex;
     align-items: center;
     font-weight: 500;
 }
 
-/* EFECTO HOVER */
 .sidebar-custom .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ------------------------------ */
-/* ESTILO PARA EL ÍTEM ACTIVO    */
-/* ------------------------------ */
 .sidebar-custom .nav-link.active {
     background-color: #ffffff !important;
     color: #1D5AB3 !important;
     font-weight: 600;
 }
 
-.sidebar-custom .nav-link.active i {
-    color: #1D5AB3 !important;
-}
-
+.sidebar-custom .nav-link.active i,
 .sidebar-custom .nav-link.active span {
     color: #1D5AB3 !important;
 }
 
-/* TRIÁNGULO BLANCO A LA DERECHA */
 .sidebar-custom .nav-link.active::after {
     content: "";
     position: absolute;
@@ -63,18 +51,29 @@
     border-left: 14px solid white;
 }
 
-/* ------------------------------ */
-/* BOTÓN HAMBURGUESA DENTRO DEL HEADER DEL SIDEBAR */
-/* ------------------------------ */
 #sidebarToggle {
     background: none;
     border: none;
     padding: 0;
-    margin-left: 0.5rem; /* separa un poco del texto */
+    margin-left: 0.5rem;
     cursor: pointer;
 }
 
 #sidebarToggle i {
     font-size: 1.4rem;
-    color: #000000; /* blanco si tu fondo del sidebar es azul oscuro */
+    color: #ffffff !important;
+}
+
+#sidebar-expander {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1051;
+    background: #1D5AB3;
+    border: none;
+    color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    display: none;
+    transition: all 0.3s ease;
 }
