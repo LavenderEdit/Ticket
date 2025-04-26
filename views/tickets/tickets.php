@@ -10,6 +10,10 @@
         <button type="button" class="btn btn-light border border-secondary rounded-pill">
             Calendario
         </button>
+        <button type="button" class="btn btn-light border border-secondary rounded-pill"
+            onclick="openCreateTicketModal();">
+            Crear Ticket
+        </button>
     </div>
 
     <hr class="border-secondary my-4">
