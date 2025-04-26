@@ -1,4 +1,3 @@
-// /js/components/modalNotification.js
 import { openModal } from "./modal-manager.js";
 
 /**
