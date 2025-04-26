@@ -1,8 +1,12 @@
 import { initCard } from "../card/main-card.js";
+import { openCreateTicketModal } from "../../components/create-ticket-modal.js";
 
 const pageCallbacks = {
   dashboard: () => {
     initCard();
+  },
+  tickets: () => {
+    window.openCreateTicketModal = openCreateTicketModal;
   },
 };
 
