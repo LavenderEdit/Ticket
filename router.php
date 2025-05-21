@@ -18,6 +18,10 @@ switch (strtolower($controllerName)) {
         require_once 'controllers/UsuarioController.php';
         $controller = new \Controllers\UsuarioController();
         break;
+    case 'ticket':
+        require_once 'controllers/TicketController.php';
+        $controller = new \Controllers\TicketController();
+        break;
     default:
         header('Content-Type: application/json');
         echo json_encode(['error' => 'Controlador no válido.']);

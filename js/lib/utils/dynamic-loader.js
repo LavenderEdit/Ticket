@@ -1,5 +1,6 @@
 import { initCard } from "../card/main-card.js";
 import { openCreateTicketModal } from "../../components/create-ticket-modal.js";
+import { Ticket } from "../../views/dashboard.js?v=1";
 
 const pageCallbacks = {
   dashboard: () => {
@@ -7,6 +8,7 @@ const pageCallbacks = {
   },
   tickets: () => {
     window.openCreateTicketModal = openCreateTicketModal;
+    Ticket.getAll();
   },
 };
 
