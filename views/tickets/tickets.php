@@ -1,15 +1,6 @@
 <div class="container-fluid py-4">
     <!-- 1) Navegación principal: Tabla / Blog / Calendario -->
     <div class="d-flex flex-wrap gap-2 mb-3">
-        <button type="button" class="btn btn-light border border-secondary rounded-pill">
-            Tabla
-        </button>
-        <button type="button" class="btn btn-light border border-secondary rounded-pill">
-            Blog
-        </button>
-        <button type="button" class="btn btn-light border border-secondary rounded-pill">
-            Calendario
-        </button>
         <button type="button" class="btn btn-light border border-secondary rounded-pill"
             onclick="openCreateTicketModal();">
             Crear Ticket

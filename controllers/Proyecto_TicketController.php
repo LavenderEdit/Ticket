@@ -47,7 +47,7 @@ class UsuarioWorkspaceController extends Controller
             $data['id_ticket'],
             $data['id_proyecto'],
             $data['assigned_by']
-         
+        
         );
 
         $this->sendResponse($resultado ? 201 : 500, [
