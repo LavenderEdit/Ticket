@@ -26,21 +26,21 @@
 
     <!-- Tabla de tickets -->
     <div class="bg-light p-3 rounded">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">Nombre del Ticket <i class="fas fa-sort ms-1"></i></th>
-                        <th scope="col">Cliente <i class="fas fa-sort ms-1"></i></th>
-                        <th scope="col">Detalle del Servicio <i class="fas fa-sort ms-1"></i></th>
-                    </tr>
-                </thead>
-                <tbody id="ticket-table-body">
-                    <!-- Los datos se cargarán aquí dinámicamente -->
-                </tbody>
-            </table>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" class="fw-bold text-dark py-3">Nombre del Ticket <i class="fas fa-sort ms-1 text-secondary"></i></th>
+                    <th scope="col" class="fw-bold text-dark py-3" style="width: 20%;">Cliente <i class="fas fa-sort ms-1 text-secondary"></i></th>
+                    <th scope="col" class="fw-bold text-dark py-3">Detalle del Servicio <i class="fas fa-sort ms-1 text-secondary"></i></th>
+                </tr>
+            </thead>
+            <tbody id="ticket-table-body" class="table-group-divider">
+                <!-- Los datos se cargarán aquí dinámicamente -->
+            </tbody>
+        </table>
     </div>
+</div>
 
     <!-- Modal para crear ticket -->
     <div class="modal fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel" aria-hidden="true">
